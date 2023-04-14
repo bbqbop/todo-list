@@ -83,7 +83,8 @@ const updateProjectSidebar = function(){
         erase.dataset.idx = project.idx;
         erase.textContent = 'X';
         erase.addEventListener('click', (e) => {
-            console.log(e)
+            projectList.erase(e.target.dataset.idx);
+            updateProjectSidebar();
         })
 
         div.append(btn, erase);

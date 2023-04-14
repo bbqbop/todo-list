@@ -1,7 +1,12 @@
 export const projectList = {
     list: [],
     erase: function(idx){
-        this.list.splice(idx,1);
+        this.list.forEach(entry => {
+            if(idx == entry.idx){
+                let arrayIdx = this.list.indexOf(entry)
+                this.list.splice(arrayIdx, 1);
+            }
+        })
     }
 };
 
