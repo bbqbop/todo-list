@@ -1,3 +1,5 @@
+import initializeUI from './ui';
+
 export const projectList = {
     list: [],
     erase: function(idx){
@@ -9,6 +11,8 @@ export const projectList = {
         })
     }
 };
+
+const ui = initializeUI();
 
 const TodoItem = function(title, desc, dueDate, prio){
     this.title = title;
@@ -27,6 +31,8 @@ const createProject = function(title){
     newProject.isCurrentProject = true;
     projectIdx++;
     projectList.list.push(newProject);
+    ui.updateProjectSidebar();
+    updateEventListeners();
     
     return newProject;
 }
@@ -42,6 +48,21 @@ createProject.prototype = {
 
 const defaultProject = createProject('myTodoList');
 
+// USER INPUTS
+
+const submits = (function(){
+    // submits
+    document.addEventListener('submit', (e) => {
+        e.preventDefault();
+        if(e.target.id === 'itemForm') handleUserInput.newItem(e);
+        if(e.target.id === 'projectForm') handleUserInput.newProject(e);
+    });
+})();
+
+const projectInputs = function(){
+    
+}
+
 const handleUserInput = {
     newItem : function(e){
         const title = e.target[0].value;
@@ -56,20 +77,14 @@ const handleUserInput = {
                 project.addItem(item);
             }
         })
-        console.log(projectList);
+        console.log('ITEM ADDED', projectList);
     },
     newProject : function(e){
         const newProject =  createProject(e.target[0].value);
     }
 }
 
-const userInputs = (function(){
-    document.addEventListener('submit', (e) => {
-        e.preventDefault();
-        if(e.target.id === 'itemForm') handleUserInput.newItem(e);
-        if(e.target.id === 'projectForm') handleUserInput.newProject(e);
-    });
-})();
+
 
 
 
