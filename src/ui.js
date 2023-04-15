@@ -1,4 +1,4 @@
-import { projectList } from "./index.js";
+import { exportList as projects } from "./index.js";
 
 export default function initializeUI(){
     const content = document.querySelector('.content');
@@ -14,7 +14,7 @@ export default function initializeUI(){
         parentElement.append(label);
     }
 
-    // Form to add new todo Item
+    // Add todo Item form
 
     const ItemFormWrapper = document.createElement('div');
     ItemFormWrapper.classList.add('ItemFormWrapper');
@@ -44,7 +44,7 @@ export default function initializeUI(){
     prioInp.value = '2';
 
 
-    // Form to add new project
+    // Add project form
 
     const projectFormWrapper = document.createElement('div');
     projectFormWrapper.classList.add('projectFormWrapper');
@@ -64,50 +64,67 @@ export default function initializeUI(){
 
     content.append(projectFormWrapper);
 
-    // Display Project List
+    // Project List
 
     const projectSidebar = document.createElement('div');
     projectSidebar.classList.add('projectSidebar');
+    content.append(projectSidebar);
 
     const updateProjectSidebar = function(){
         projectSidebar.innerHTML = '';
-        projectList.list.forEach( project => {
+        projects.forEach( project => {
             const div = document.createElement('div');
             div.classList.add('projects');
 
             const btn = document.createElement('button');
             btn.dataset.idx = project.idx;
             btn.textContent = project.title;
-            btn.addEventListener('click', () => {
-                selectProject(project);
-            })
-
+            
             const erase = document.createElement('button')
             erase.dataset.idx = project.idx;
             erase.textContent = 'X';
-            // erase.addEventListener('click', (e) => {
-            //     projectList.erase(e.target.dataset.idx);
-            //     updateProjectSidebar();
-            // })
-
+           
             div.append(btn, erase);
             projectSidebar.append(div);
         });  
     };
 
-    const selectProject = function(project) {
-        projectList.list.forEach(project => {
-            project.isCurrentProject = false;
-        });
-        project.isCurrentProject = true;
+    // Todo items
+   
+    const todoDisplay = document.createElement('div')
+    todoDisplay.classList.add('todoDisplay');
+    content.append(todoDisplay); 
+
+    const updateTodoView = function() {
+        todoDisplay.innerHTML = '';
+        const currentProject = projects.find( project => {
+            return project.isCurrentProject === true;
+        })
+        if (!currentProject) return;
+
+        for (let item of currentProject.todoList) {
+            const div = document.createElement('div');
+            div.classList.add('todos');
+            div.dataset.idx = currentProject.idx;
+
+            const title = document.createElement('div');
+            title.textContent = item.title;
+
+            const priority = document.createElement('div');
+            if (item.prio == 1) priority.style.backgroundColor = 'green';
+            if (item.prio == 2) priority.style.backgroundColor = 'yellow';
+            if (item.prio == 3) priority.style.backgroundColor = 'red';
+
+            div.append(title, priority);
+            todoDisplay.append(div);
+        }
     }
 
-    updateProjectSidebar();
-
-    content.append(projectSidebar);
+    
 
     return {
         initializeUI,
-        updateProjectSidebar
+        updateProjectSidebar,
+        updateTodoView
     }
 }
