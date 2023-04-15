@@ -1,5 +1,3 @@
-import { currentProject } from "./ui.js";
-
 export const projectList = {
     list: [],
     erase: function(idx){
@@ -26,6 +24,7 @@ const createProject = function(title){
     newProject.todoList = [];
     newProject.title = title;
     newProject.idx = projectIdx;
+    newProject.isCurrentProject = true;
     projectIdx++;
     projectList.list.push(newProject);
     
@@ -43,6 +42,27 @@ createProject.prototype = {
 
 const defaultProject = createProject('myTodoList');
 
+const handleUserInput = {
+    newItem : function(e){
+        const title = e.target[0].value;
+        const desc = e.target[1].value;
+        const dueDate = e.target[2].value;
+        const prio = e.target[3].value;
+
+        const item = new TodoItem(title, desc, dueDate, prio);
+
+        projectList.list.forEach(project => {
+            if (project.isCurrentProject === true){
+                project.addItem(item);
+            }
+        })
+        console.log(projectList);
+    },
+    newProject : function(e){
+        const newProject =  createProject(e.target[0].value);
+    }
+}
+
 const userInputs = (function(){
     document.addEventListener('submit', (e) => {
         e.preventDefault();
@@ -51,29 +71,8 @@ const userInputs = (function(){
     });
 })();
 
-const handleUserInput = {
-    newItem : function(e){
-        const title = e.target[0].value;
-        const desc = e.target[1].value;
-        const dueDate = e.target[2].value;
-        const prio = e.target[3].value;
 
-        const newItem = new TodoItem(title, desc, dueDate, prio);
 
-        projectList.list.forEach(entry => {
-            if(currentProject == entry.idx){
-                let arrayIdx = this.list.indexOf(entry)
-                this.list[arrayIdx].push(newItem);
-            }
-        });
-
-        // currentProject.addItem(newItem);
-        console.log(currentProject);
-    },
-    newProject : function(e){
-        const newProject =  createProject(e.target[0].value);
-    }
-}
 
 
 

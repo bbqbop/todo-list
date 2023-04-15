@@ -1,8 +1,5 @@
 import { projectList } from "./index.js";
 
-export let currentProject = 0;
-
-
 const content = document.querySelector('.content');
 
 const createInput = function(type, text, name, parentElement){
@@ -73,15 +70,15 @@ projectSidebar.classList.add('projectSidebar');
 
 const updateProjectSidebar = function(){
     projectSidebar.innerHTML = '';
-    projectList.list.forEach(project => {
+    projectList.list.forEach( project => {
         const div = document.createElement('div');
         div.classList.add('projects');
 
         const btn = document.createElement('button');
         btn.dataset.idx = project.idx;
         btn.textContent = project.title;
-        btn.addEventListener('click', (e) => {
-            currentProject = e.target.dataset.idx;
+        btn.addEventListener('click', () => {
+            selectProject(project);
         })
 
         const erase = document.createElement('button')
@@ -94,8 +91,15 @@ const updateProjectSidebar = function(){
 
         div.append(btn, erase);
         projectSidebar.append(div);
-    })
+    });  
 };
+
+const selectProject = function(project) {
+    projectList.list.forEach(project => {
+        project.isCurrentProject = false;
+    });
+    project.isCurrentProject = true;
+}
 
 updateProjectSidebar();
 
