@@ -1,3 +1,5 @@
+import { currentProject } from "./ui.js";
+
 export const projectList = {
     list: [],
     erase: function(idx){
@@ -58,7 +60,15 @@ const handleUserInput = {
 
         const newItem = new TodoItem(title, desc, dueDate, prio);
 
-        defaultProject.addItem(newItem);
+        projectList.list.forEach(entry => {
+            if(currentProject == entry.idx){
+                let arrayIdx = this.list.indexOf(entry)
+                this.list[arrayIdx].push(newItem);
+            }
+        });
+
+        // currentProject.addItem(newItem);
+        console.log(currentProject);
     },
     newProject : function(e){
         const newProject =  createProject(e.target[0].value);
