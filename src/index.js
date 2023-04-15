@@ -2,17 +2,61 @@ import initializeUI from './ui';
 
 export const projectList = {
     list: [],
-    erase: function(idx){
-        this.list.forEach(entry => {
-            if(idx == entry.idx){
-                let arrayIdx = this.list.indexOf(entry)
-                this.list.splice(arrayIdx, 1);
+    erase: function(idx) {
+        this.list.splice(this.findIdx(idx), 1);
+    },
+    focus: function(idx) {
+        this.list.forEach( entry => {
+            entry.isCurrentProject = false;
+        })
+        this.list[this.findIdx(idx)].isCurrentProject = true;
+    }, 
+    findIdx: function(idx) {
+        let arrayIdx;
+        this.list.forEach( entry => {
+            if (idx == entry.idx){
+                arrayIdx = this.list.indexOf(entry)
             }
         })
-    }
+        return arrayIdx;
+    },
 };
 
 const ui = initializeUI();
+
+// USER INPUTS
+
+const UIController = (function eventListeners(){
+    document.addEventListener('submit', (e) => {
+        e.preventDefault();
+        if(e.target.id === 'itemForm') handleUserInput.newItem(e);
+        if(e.target.id === 'projectForm') handleUserInput.newProject(e);
+    });
+    return {
+        addListener: function() {
+            const deleteBtns = document.querySelectorAll('.projects button ~ button');
+            deleteBtns.forEach(button => {
+                button.addEventListener('click', (e) => {
+                    projectList.erase(e.target.dataset.idx);
+                    this.update();
+                })
+            })
+            
+            const projectBtns = document.querySelectorAll('.projects button:first-child');
+            projectBtns.forEach(button => {
+                button.addEventListener('click', (e) => {
+                    console.log('Project!')
+                    projectList.focus(e.target.dataset.idx);
+                })
+            })
+        },
+        update: function() {
+            ui.updateProjectSidebar();
+            this.addListener();
+        }
+
+    }
+})();
 
 const TodoItem = function(title, desc, dueDate, prio){
     this.title = title;
@@ -31,8 +75,7 @@ const createProject = function(title){
     newProject.isCurrentProject = true;
     projectIdx++;
     projectList.list.push(newProject);
-    ui.updateProjectSidebar();
-    updateEventListeners();
+    UIController.update();
     
     return newProject;
 }
@@ -47,21 +90,6 @@ createProject.prototype = {
 }
 
 const defaultProject = createProject('myTodoList');
-
-// USER INPUTS
-
-const submits = (function(){
-    // submits
-    document.addEventListener('submit', (e) => {
-        e.preventDefault();
-        if(e.target.id === 'itemForm') handleUserInput.newItem(e);
-        if(e.target.id === 'projectForm') handleUserInput.newProject(e);
-    });
-})();
-
-const projectInputs = function(){
-    
-}
 
 const handleUserInput = {
     newItem : function(e){
@@ -83,6 +111,7 @@ const handleUserInput = {
         const newProject =  createProject(e.target[0].value);
     }
 }
+
 
 
 
