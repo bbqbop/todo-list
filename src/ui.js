@@ -105,7 +105,7 @@ export default function initializeUI(){
         for (let item of currentProject.todoList) {
             const div = document.createElement('div');
             div.classList.add('todos');
-            div.dataset.idx = currentProject.idx;
+            div.dataset.idx = currentProject.todoList.indexOf(item);
 
             const title = document.createElement('div');
             title.textContent = item.title;
@@ -115,7 +115,12 @@ export default function initializeUI(){
             if (item.prio == 2) priority.style.backgroundColor = 'yellow';
             if (item.prio == 3) priority.style.backgroundColor = 'red';
 
-            div.append(title, priority);
+            const deleteBtn = document.createElement('button');
+            deleteBtn.classList.add('todoDeleteBtns')
+            deleteBtn.textContent = 'X' 
+            deleteBtn.dataset.idx = currentProject.todoList.indexOf(item);
+
+            div.append(title, priority, deleteBtn);
             todoDisplay.append(div);
         }
     }
