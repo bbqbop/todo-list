@@ -1,15 +1,19 @@
 import initializeUI from './ui';
 
-export const projectList = {
+export { exportList }
+
+const projects = {
     list: [],
     erase: function(idx) {
         this.list.splice(this.findIdx(idx), 1);
+        UIController.update();
     },
     focus: function(idx) {
         this.list.forEach( entry => {
             entry.isCurrentProject = false;
         })
         this.list[this.findIdx(idx)].isCurrentProject = true;
+        UIController.update();
     }, 
     findIdx: function(idx) {
         let arrayIdx;
@@ -22,6 +26,8 @@ export const projectList = {
     },
 };
 
+const exportList = projects.list;
+
 const ui = initializeUI();
 
 // USER INPUTS
@@ -31,27 +37,36 @@ const UIController = (function eventListeners(){
         e.preventDefault();
         if(e.target.id === 'itemForm') handleUserInput.newItem(e);
         if(e.target.id === 'projectForm') handleUserInput.newProject(e);
+        const forms = document.querySelectorAll('form');
+        forms.forEach(form => {
+            form.reset();
+        })
     });
     return {
         addListener: function() {
             const deleteBtns = document.querySelectorAll('.projects button ~ button');
             deleteBtns.forEach(button => {
+                button.removeEventListener('click', (e) => {
+                    projects.erase(e.target.dataset.idx);
+                })
                 button.addEventListener('click', (e) => {
-                    projectList.erase(e.target.dataset.idx);
-                    this.update();
+                    projects.erase(e.target.dataset.idx);
                 })
             })
             
             const projectBtns = document.querySelectorAll('.projects button:first-child');
             projectBtns.forEach(button => {
+                button.removeEventListener('click', (e) => {
+                    projects.focus(e.target.dataset.idx);
+                })
                 button.addEventListener('click', (e) => {
-                    console.log('Project!')
-                    projectList.focus(e.target.dataset.idx);
+                    projects.focus(e.target.dataset.idx);
                 })
             })
         },
         update: function() {
             ui.updateProjectSidebar();
+            ui.updateTodoView();
             this.addListener();
         }
 
@@ -72,10 +87,10 @@ const createProject = function(title){
     newProject.todoList = [];
     newProject.title = title;
     newProject.idx = projectIdx;
-    newProject.isCurrentProject = true;
+    newProject.isCurrentProject;
+    projects.list.push(newProject);
+    projects.focus(projectIdx);
     projectIdx++;
-    projectList.list.push(newProject);
-    UIController.update();
     
     return newProject;
 }
@@ -83,9 +98,11 @@ const createProject = function(title){
 createProject.prototype = {
     addItem: function(item){
         this.todoList.push(item);
+        UIController.update();
     },
     removeItem: function(idx){
         this.todoList.splice(idx,1);
+        UIController.update();
     }
 }
 
@@ -100,23 +117,18 @@ const handleUserInput = {
 
         const item = new TodoItem(title, desc, dueDate, prio);
 
-        projectList.list.forEach(project => {
+        projects.list.forEach(project => {
             if (project.isCurrentProject === true){
                 project.addItem(item);
             }
         })
-        console.log('ITEM ADDED', projectList);
     },
     newProject : function(e){
         const newProject =  createProject(e.target[0].value);
     }
 }
 
-
-
-
-
-
+ui.updateTodoView();
 
 
 
