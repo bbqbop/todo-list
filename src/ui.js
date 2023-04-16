@@ -1,15 +1,16 @@
-import { exportList as projects } from "./index.js";
+import { exportList as projects, findCurrentProject, findCurrentItem } from "./index.js";
 
 export default function initializeUI(){
     const content = document.querySelector('.content');
 
-    const createInput = function(type, text, name, parentElement){
+    const createInput = function(type, labelText, name, parentElement, value){
         const label = document.createElement('legend');
         label.classList.add(name);
-        label.textContent = text;
+        label.textContent = labelText;
         const input = document.createElement('input');
         input.type = type;
         input.id = name
+        input.value = value || ''
         label.append(input);
         parentElement.append(label);
     }
@@ -31,7 +32,7 @@ export default function initializeUI(){
     createInput('text','Description: ','desc', itemForm);
     createInput('date','Due Date: ','date', itemForm);
     createInput('range','Priority: ','prio', itemForm);
-    createInput('submit','','submit', itemForm);
+    createInput('submit','','submit', itemForm, 'save');
 
     ItemFormWrapper.append(itemForm)
     content.append(ItemFormWrapper);
@@ -42,7 +43,6 @@ export default function initializeUI(){
     prioInp.max = '3';
     prioInp.step = '1';
     prioInp.value = '2';
-
 
     // Add project form
 
@@ -58,12 +58,14 @@ export default function initializeUI(){
     projectForm.append(projectLegend);
 
     createInput('text', 'Title: ', 'title', projectForm)
-    createInput('submit','','submit', projectForm);
+    createInput('submit','','submit', projectForm, 'safe');
 
     projectFormWrapper.append(projectForm);
 
     content.append(projectFormWrapper);
 
+    
+    // Dynamic objects:
     // Project List
 
     const projectSidebar = document.createElement('div');
@@ -91,15 +93,14 @@ export default function initializeUI(){
 
     // Todo items
    
-    const todoDisplay = document.createElement('div')
-    todoDisplay.classList.add('todoDisplay');
-    content.append(todoDisplay); 
+    const todoView = document.createElement('div')
+    todoView.classList.add('todoView');
+    content.append(todoView); 
 
     const updateTodoView = function() {
-        todoDisplay.innerHTML = '';
-        const currentProject = projects.find( project => {
-            return project.isCurrentProject === true;
-        })
+        todoView.innerHTML = '';
+        const currentProject = findCurrentProject();
+
         if (!currentProject) return;
 
         for (let item of currentProject.todoList) {
@@ -107,8 +108,10 @@ export default function initializeUI(){
             div.classList.add('todos');
             div.dataset.idx = currentProject.todoList.indexOf(item);
 
-            const title = document.createElement('div');
+            const title = document.createElement('button');
+            title.classList.add('todoTitleBtns')
             title.textContent = item.title;
+            title.dataset.idx = currentProject.todoList.indexOf(item);
 
             const priority = document.createElement('div');
             if (item.prio == 1) priority.style.backgroundColor = 'green';
@@ -121,8 +124,24 @@ export default function initializeUI(){
             deleteBtn.dataset.idx = currentProject.todoList.indexOf(item);
 
             div.append(title, priority, deleteBtn);
-            todoDisplay.append(div);
+            todoView.append(div);
         }
+    }
+
+    // Focussed Item 
+
+    const focusItem = document.createElement('div');
+    focusItem.classList.add('focusItem');
+    content.append(focusItem);
+
+    const updateFocusItem = function() {
+        const currentItem = findCurrentItem();
+
+        if (!currentItem) return;
+        
+        console.log(currentItem);
+        // (type, labelText, name, parentElement, value)
+        // createInput('text', '', title, focusItem, currentItem.title)
     }
 
     
@@ -130,6 +149,7 @@ export default function initializeUI(){
     return {
         initializeUI,
         updateProjectSidebar,
-        updateTodoView
+        updateTodoView,
+        updateFocusItem
     }
 }
