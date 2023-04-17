@@ -128,7 +128,8 @@ export default function initializeUI(){
 
             const checkbox = document.createElement('input');
             checkbox.dataset.idx = itemIdx;
-            checkbox.type = 'checkbox'
+            checkbox.type = 'checkbox';
+            checkbox.id = 'isDone';
             checkbox.checked = item.isDone;
 
             const deleteBtn = document.createElement('button');

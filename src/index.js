@@ -87,12 +87,7 @@ const UIController = (function eventListeners(){
 
             const checkboxes = document.querySelectorAll('.todoView input[type ="checkbox"');
             checkboxes.forEach(checkbox => {
-                checkbox.addEventListener('change', (e) => {
-                    const currentProject = findCurrentProject();
-                    const itemIdx = e.target.dataset.idx;
-                    currentProject.todoList[itemIdx].isDone = e.target.checked;
-                    UIController.update();
-                })
+                checkbox.addEventListener('change', (e) => handleUserInput.updateItem(e))
             })
 
         },
@@ -178,7 +173,12 @@ const handleUserInput = {
 
         const item = new TodoItem(title, desc, dueDate, prio);
 
-        findCurrentProject().addItem(item)
+        let currentProject = findCurrentProject();
+
+        if(!currentProject){
+            currentProject = createProject('myTodoList');
+        }
+        currentProject.addItem(item);
     },
     updateItem : function(e) {
         const idx = this.getIdx(e);
