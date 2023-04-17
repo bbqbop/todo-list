@@ -88,6 +88,16 @@ const UIController = (function eventListeners(){
                 })
             })
 
+            const checkboxes = document.querySelectorAll('.todoView input[type ="checkbox"');
+            checkboxes.forEach(checkbox => {
+                checkbox.addEventListener('change', (e) => {
+                    const currentProject = findCurrentProject();
+                    const itemIdx = e.target.dataset.idx;
+                    currentProject.todoList[itemIdx].isDone = e.target.checked;
+                    UIController.update();
+                })
+            })
+
             const deleteBtns = document.querySelectorAll('.todoDeleteBtns');
             deleteBtns.forEach( button => {
                 button.removeEventListener('click', (e) => {
@@ -105,13 +115,14 @@ const UIController = (function eventListeners(){
                 input.addEventListener('change', (e) => {
                     const currentItem = findCurrentItem();
                     const targetProperty = e.target.id;
+
                     if (targetProperty === 'isDone'){
                         currentItem.isDone = e.target.checked;
                     }
                     else {
                         currentItem[targetProperty] = e.target.value;
                     }
-                    console.log(currentItem)
+                    UIController.update();
                 })
             })
 

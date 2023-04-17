@@ -14,6 +14,8 @@ export default function initializeUI(){
         input.dataset.idx = dataIdx;
         label.append(input);
         parentElement.append(label);
+
+        return input
     }
 
     // Add todo Item form
@@ -38,12 +40,14 @@ export default function initializeUI(){
     ItemFormWrapper.append(itemForm)
     content.append(ItemFormWrapper);
 
-        // range input properties:
-    const prioInp = document.querySelector('#prio');
-    prioInp.min = '1';
-    prioInp.max = '3';
-    prioInp.step = '1';
-    prioInp.value = '2';
+    const addRangeInputAttrs = function(selector){
+        const prioInp = document.querySelector(selector);
+        prioInp.min = '1';
+        prioInp.max = '3';
+        prioInp.step = '1';
+    }
+
+    addRangeInputAttrs('#prio');
 
     // Add project form
 
@@ -105,26 +109,34 @@ export default function initializeUI(){
         if (!currentProject) return;
 
         for (let item of currentProject.todoList) {
+            const itemIdx = currentProject.todoList.indexOf(item)
+
             const div = document.createElement('div');
             div.classList.add('todos');
-            div.dataset.idx = currentProject.todoList.indexOf(item);
+            div.dataset.idx = itemIdx;
 
             const title = document.createElement('button');
             title.classList.add('todoTitleBtns')
             title.textContent = item.title;
-            title.dataset.idx = currentProject.todoList.indexOf(item);
+            title.dataset.idx = itemIdx;
 
             const priority = document.createElement('div');
-            if (item.prio == 1) priority.style.backgroundColor = 'green';
-            if (item.prio == 2) priority.style.backgroundColor = 'yellow';
-            if (item.prio == 3) priority.style.backgroundColor = 'red';
+            if (item.isDone) priority.style.backgroundColor = 'green';
+            else if (item.prio == 1) priority.style.backgroundColor = 'yellow';
+            else if (item.prio == 2) priority.style.backgroundColor = 'orange';
+            else if (item.prio == 3) priority.style.backgroundColor = 'red';
+
+            const checkbox = document.createElement('input');
+            checkbox.dataset.idx = itemIdx;
+            checkbox.type = 'checkbox'
+            checkbox.checked = item.isDone;
 
             const deleteBtn = document.createElement('button');
             deleteBtn.classList.add('todoDeleteBtns')
             deleteBtn.textContent = 'X' 
-            deleteBtn.dataset.idx = currentProject.todoList.indexOf(item);
+            deleteBtn.dataset.idx = itemIdx;
 
-            div.append(title, priority, deleteBtn);
+            div.append(title, priority, checkbox, deleteBtn);
             todoView.append(div);
         }
     }
@@ -152,10 +164,16 @@ export default function initializeUI(){
 
         focusItem.append(projectTitle, projectLen);
         // (type, labelText, name, parentElement, value, dataIdx)
-        createInput('text','', 'title', focusItem, currentItem.title, itemIdx)
-        createInput('text','', 'desc', focusItem, currentItem.desc, itemIdx)
-        createInput('date','', 'dueDate', focusItem, currentItem.dueDate, itemIdx)
-        createInput('checkbox','Done', 'isDone', focusItem, false, itemIdx)
+        createInput('text','', 'title', focusItem, currentItem.title, itemIdx);
+        createInput('text','', 'desc', focusItem, currentItem.desc, itemIdx);
+        createInput('date','', 'dueDate', focusItem, currentItem.dueDate, itemIdx);
+        createInput('range','Priority: ' ,'prio', focusItem, currentItem.prio, itemIdx)
+        createInput('checkbox','Done', 'isDone', focusItem, currentItem.isDone, itemIdx);
+        addRangeInputAttrs('.focusItem #prio');
+
+        const checkbox = document.querySelector('.focusItem input[type = "checkbox"]')
+        checkbox.checked = currentItem.isDone;
+        document.querySelector('.focusItem input[type = "range"]').disabled = currentItem.isDone;
 
         const deleteBtn = document.createElement('button');
         deleteBtn.classList.add('todoDeleteBtns')
@@ -167,6 +185,23 @@ export default function initializeUI(){
         nextBtn.dataset.idx = itemIdx;
         nextBtn.innerHTML = '&#x27A1;'
         focusItem.append(deleteBtn, nextBtn);
+
+        if ( currentItem.isDone ) {
+            focusItem.style.backgroundColor = 'green';
+        }
+        else {
+            switch (parseInt(currentItem.prio)){
+                case 1 : 
+                    focusItem.style.backgroundColor = 'yellow';
+                    break;
+                case 2 : 
+                    focusItem.style.backgroundColor = 'orange';
+                    break;
+                case 3 : 
+                    focusItem.style.backgroundColor = 'red';
+                    break;
+            }
+        }
     }
 
     
