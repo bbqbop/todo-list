@@ -1,4 +1,4 @@
-import { exportList as projects, findCurrentProject, findCurrentItem } from "./index.js";
+import { exportList as projects, findCurrentProject, findCurrentTask } from "./index.js";
 
 export default function initializeUI(){
     const content = document.querySelector('.content');
@@ -18,27 +18,28 @@ export default function initializeUI(){
         return input
     }
 
-    // Add todo Item form
+    // Add todo Task form
 
-    const ItemFormWrapper = document.createElement('div');
-    ItemFormWrapper.classList.add('ItemFormWrapper');
+    const taskFormWrapper = document.createElement('div');
+    taskFormWrapper.classList.add('taskFormWrapper');
 
-    const itemForm = document.createElement('form');
-    itemForm.classList.add('itemForm');
-    itemForm.id = 'itemForm'
+    const taskForm = document.createElement('form');
+    taskForm.classList.add('taskForm');
+    taskForm.id = 'taskForm';
+    taskForm.style.display = 'none';
 
-    const itemLegend = document.createElement('legend');
-    itemLegend.textContent = 'New Item:'
-    itemForm.append(itemLegend);
+    const taskLegend = document.createElement('legend');
+    taskLegend.textContent = 'New Task:'
+    taskForm.append(taskLegend);
 
-    createInput('text','Title: ','title', itemForm);
-    createInput('text','Description: ','desc', itemForm);
-    createInput('date','Due Date: ','date', itemForm);
-    createInput('range','Priority: ','prio', itemForm);
-    createInput('submit','','submit', itemForm, 'save');
+    createInput('text','Title: ','title', taskForm);
+    createInput('text','Description: ','desc', taskForm);
+    createInput('date','Due Date: ','date', taskForm);
+    createInput('range','Priority: ','prio', taskForm);
+    createInput('submit','','submit', taskForm, 'save');
 
-    ItemFormWrapper.append(itemForm)
-    content.append(ItemFormWrapper);
+    taskFormWrapper.append(taskForm)
+    content.append(taskFormWrapper);
 
     const addRangeInputAttrs = function(selector){
         const prioInp = document.querySelector(selector);
@@ -57,6 +58,8 @@ export default function initializeUI(){
     const projectForm = document.createElement('form');
     projectForm.classList.add('projectForm');
     projectForm.id = 'projectForm';
+    projectForm.style.display = 'none';
+
 
     const projectLegend = document.createElement('legend');
     projectLegend.textContent = 'New Project:'
@@ -94,9 +97,14 @@ export default function initializeUI(){
             div.append(btn, erase);
             projectSidebar.append(div);
         });  
+        const addProjectBtn = document.createElement('button');
+        addProjectBtn.classList.add('addProjectBtn');
+        addProjectBtn.textContent = '+ add new project'
+        projectSidebar.append(addProjectBtn);
     };
 
-    // Todo items
+
+    // Task list
    
     const todoView = document.createElement('div')
     todoView.classList.add('todoView');
@@ -104,102 +112,109 @@ export default function initializeUI(){
 
     const updateTodoView = function() {
         todoView.innerHTML = '';
+
+        const addTaskBtn = document.createElement('button');
+        addTaskBtn.classList.add('addTaskBtn');
+        addTaskBtn.textContent = '+ add new task'
+        todoView.append(addTaskBtn);
+
         const currentProject = findCurrentProject();
 
         if (!currentProject) return;
 
-        for (let item of currentProject.todoList) {
-            const itemIdx = currentProject.todoList.indexOf(item)
+        for (let task of currentProject.todoList) {
+            const taskIdx = currentProject.todoList.indexOf(task)
 
             const div = document.createElement('div');
             div.classList.add('todos');
-            div.dataset.idx = itemIdx;
+            div.dataset.idx = taskIdx;
 
             const title = document.createElement('button');
             title.classList.add('todoTitleBtns')
-            title.textContent = item.title;
-            title.dataset.idx = itemIdx;
+            title.textContent = task.title;
+            title.dataset.idx = taskIdx;
 
             const priority = document.createElement('div');
-            if (item.isDone) priority.style.backgroundColor = 'green';
-            else if (item.prio == 1) priority.style.backgroundColor = 'yellow';
-            else if (item.prio == 2) priority.style.backgroundColor = 'orange';
-            else if (item.prio == 3) priority.style.backgroundColor = 'red';
+            if (task.isDone) priority.style.backgroundColor = 'green';
+            else if (task.prio == 1) priority.style.backgroundColor = 'yellow';
+            else if (task.prio == 2) priority.style.backgroundColor = 'orange';
+            else if (task.prio == 3) priority.style.backgroundColor = 'red';
 
             const checkbox = document.createElement('input');
-            checkbox.dataset.idx = itemIdx;
+            checkbox.dataset.idx = taskIdx;
             checkbox.type = 'checkbox';
             checkbox.id = 'isDone';
-            checkbox.checked = item.isDone;
+            checkbox.checked = task.isDone;
 
             const deleteBtn = document.createElement('button');
             deleteBtn.classList.add('todoDeleteBtns')
             deleteBtn.textContent = 'X' 
-            deleteBtn.dataset.idx = itemIdx;
+            deleteBtn.dataset.idx = taskIdx;
 
             div.append(title, priority, checkbox, deleteBtn);
             todoView.append(div);
         }
+        
     }
 
-    // Focussed Item 
+    // Focussed Task 
 
-    const focusItem = document.createElement('div');
-    focusItem.classList.add('focusItem');
-    content.append(focusItem);
+    const focusTask = document.createElement('div');
+    focusTask.classList.add('focusTask');
+    content.append(focusTask);
 
-    const updateFocusItem = function() {
-        focusItem.innerHTML = '';
-        const currentItem = findCurrentItem();
+    const updateFocusTask = function() {
+        focusTask.innerHTML = '';
+        const currentTask = findCurrentTask();
         const currentProject = findCurrentProject();
         
-        if (!currentItem) return;
+        if (!currentTask) return;
 
-        const itemIdx = currentProject.todoList.indexOf(currentItem);
+        const taskIdx = currentProject.todoList.indexOf(currentTask);
 
         const projectTitle = document.createElement('h1');
         projectTitle.textContent = currentProject.title;
 
         const projectLen = document.createElement('p');
-        projectLen.textContent = `${itemIdx + 1}/${currentProject.todoList.length}`
+        projectLen.textContent = `${taskIdx + 1}/${currentProject.todoList.length}`
 
-        focusItem.append(projectTitle, projectLen);
+        focusTask.append(projectTitle, projectLen);
         // (type, labelText, name, parentElement, value, dataIdx)
-        createInput('text','', 'title', focusItem, currentItem.title, itemIdx);
-        createInput('text','', 'desc', focusItem, currentItem.desc, itemIdx);
-        createInput('date','', 'dueDate', focusItem, currentItem.dueDate, itemIdx);
-        createInput('range','Priority: ' ,'prio', focusItem, currentItem.prio, itemIdx)
-        createInput('checkbox','Done', 'isDone', focusItem, currentItem.isDone, itemIdx);
-        addRangeInputAttrs('.focusItem #prio');
+        createInput('text','', 'title', focusTask, currentTask.title, taskIdx);
+        createInput('text','', 'desc', focusTask, currentTask.desc, taskIdx);
+        createInput('date','', 'dueDate', focusTask, currentTask.dueDate, taskIdx);
+        createInput('range','Priority: ' ,'prio', focusTask, currentTask.prio, taskIdx)
+        createInput('checkbox','Done', 'isDone', focusTask, currentTask.isDone, taskIdx);
+        addRangeInputAttrs('.focusTask #prio');
 
-        const checkbox = document.querySelector('.focusItem input[type = "checkbox"]')
-        checkbox.checked = currentItem.isDone;
-        document.querySelector('.focusItem input[type = "range"]').disabled = currentItem.isDone;
+        const checkbox = document.querySelector('.focusTask input[type = "checkbox"]')
+        checkbox.checked = currentTask.isDone;
+        document.querySelector('.focusTask input[type = "range"]').disabled = currentTask.isDone;
 
         const deleteBtn = document.createElement('button');
         deleteBtn.classList.add('todoDeleteBtns')
         deleteBtn.textContent = 'X' 
-        deleteBtn.dataset.idx = itemIdx;
+        deleteBtn.dataset.idx = taskIdx;
 
         const nextBtn = document.createElement('button');
         nextBtn.classList.add('nextBtn');
-        nextBtn.dataset.idx = itemIdx;
+        nextBtn.dataset.idx = taskIdx;
         nextBtn.innerHTML = '&#x27A1;'
-        focusItem.append(deleteBtn, nextBtn);
+        focusTask.append(deleteBtn, nextBtn);
 
-        if ( currentItem.isDone ) {
-            focusItem.style.backgroundColor = 'green';
+        if ( currentTask.isDone ) {
+            focusTask.style.backgroundColor = 'green';
         }
         else {
-            switch (parseInt(currentItem.prio)){
+            switch (parseInt(currentTask.prio)){
                 case 1 : 
-                    focusItem.style.backgroundColor = 'yellow';
+                    focusTask.style.backgroundColor = 'yellow';
                     break;
                 case 2 : 
-                    focusItem.style.backgroundColor = 'orange';
+                    focusTask.style.backgroundColor = 'orange';
                     break;
                 case 3 : 
-                    focusItem.style.backgroundColor = 'red';
+                    focusTask.style.backgroundColor = 'red';
                     break;
             }
         }
@@ -211,6 +226,6 @@ export default function initializeUI(){
         initializeUI,
         updateProjectSidebar,
         updateTodoView,
-        updateFocusItem
+        updateFocusTask
     }
 }
