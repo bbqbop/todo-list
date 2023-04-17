@@ -1,0 +1,65 @@
+* {
+    box-sizing: border-box;
+    --gray: rgb(128, 128, 128, 0.2)
+}
+
+button {
+    background-color: inherit;
+}
+
+.active {
+    background-color: rgb(0, 0, 255, 0.5);
+}
+
+.content {
+    display: grid;
+    grid-template-columns: 200px 1fr;
+}
+
+/* sidebar */
+
+.projectSidebar {
+
+}
+
+.projectWrapper:hover {
+    background-color: var(--gray);
+}
+
+/* main */
+
+.main {
+    max-width: 800px;
+}
+
+.todoView {
+    height: 40vh;
+}
+
+.focusTask {
+    height: 40vh;
+}
+
+.main .todos * {
+    display: inline-block;
+}
+
+.todos {
+    display: grid;
+    grid-template-columns: 1fr repeat(3, 1.5rem);
+    grid-auto-rows: 1.5rem;
+    border: solid 1px gray;
+    border-radius: 2px;
+}
+
+.todos:hover {
+    background-color: var(--gray);
+}
+
+.todos * {
+    margin: 0;
+    border: none;
+    border-radius: 2px;
+    height: 100%;
+    width: 100%;
+}

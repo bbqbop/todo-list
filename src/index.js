@@ -1,4 +1,5 @@
 import initializeUI from './ui';
+import css from './style.css';
 
 export { exportList, findCurrentProject, findCurrentTask }
 
@@ -68,7 +69,7 @@ const UIController = (function eventListeners(){
                 button.addEventListener('click', (e) => handleUserInput.deleteProject(e))
             })
             
-            const projectBtns = document.querySelectorAll('.projects button:first-child');
+            const projectBtns = document.querySelectorAll('.projects');
             projectBtns.forEach(button => {
                 button.removeEventListener('click', (e) => handleUserInput.focusProject(e))
                 button.addEventListener('click', (e) => handleUserInput.focusProject(e))
@@ -78,6 +79,8 @@ const UIController = (function eventListeners(){
             addProjectBtn.addEventListener('click', () => {
                 const projectForm = document.querySelector('.projectForm');
                 projectForm.style.display = 'block'
+                const firstInput = document.querySelector('.projectForm input');
+                firstInput.focus();
                 this.update();
             })
         },
@@ -88,12 +91,13 @@ const UIController = (function eventListeners(){
                 button.addEventListener('click', (e) => handleUserInput.deleteTask(e))
             })
 
-            const titleBtns = document.querySelectorAll('.todoTitleBtns');
+            const titleBtns = document.querySelectorAll('.todos button:first-of-type');
             titleBtns.forEach( button => {
                 button.addEventListener('click', (e) => handleUserInput.focusTask(e))
             })
 
-            const checkboxes = document.querySelectorAll('.todoView input[type ="checkbox"');
+            const checkboxes = document.querySelectorAll('.todos input[type ="checkbox"');
+            console.log(checkboxes)
             checkboxes.forEach(checkbox => {
                 checkbox.addEventListener('change', (e) => handleUserInput.updateTask(e))
             })
@@ -102,6 +106,8 @@ const UIController = (function eventListeners(){
             addTaskBtn.addEventListener('click', () => {
                 const taskForm = document.querySelector('.taskForm');
                 taskForm.style.display = 'block'
+                const firstInput = document.querySelector('.taskForm input');
+                firstInput.focus();
                 this.update();
             })
         },

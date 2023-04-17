@@ -31,6 +31,9 @@ export default function initializeUI(){
     const updateProjectSidebar = function(){
         projectList.innerHTML = '';
         projects.forEach( project => {
+            const projectWrapper = document.createElement('div');
+            projectWrapper.classList.add('projectWrapper');
+
             const div = document.createElement('div');
             div.classList.add('projects');
             div.dataset.idx = project.idx;
@@ -44,7 +47,8 @@ export default function initializeUI(){
             erase.textContent = 'X';
            
             div.append(btn, erase);
-            projectList.append(div);
+            projectWrapper.append(div);
+            projectList.append(projectWrapper);
 
             if (project === findCurrentProject()){
                 div.classList.add('active')
@@ -115,7 +119,7 @@ export default function initializeUI(){
             title.dataset.idx = taskIdx;
 
             if (task === findCurrentTask()){
-                div.classList.add('active')
+                title.classList.add('active')
             }
 
             const priority = document.createElement('div');
