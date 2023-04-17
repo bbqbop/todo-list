@@ -39,8 +39,9 @@ const findCurrentProject = function() {
 const findCurrentItem = function() {
     const currentProject = findCurrentProject();
     const currentItem = currentProject.todoList.find( item => {
-        item.isCurrentItem === true;
+        return item.isCurrentItem === true;
     })
+    return currentItem;
 }
 
 const ui = initializeUI();
@@ -97,12 +98,42 @@ const UIController = (function eventListeners(){
                 })
             })
         },
+        addFocusItemListener: function() {
+            const inputs = document.querySelectorAll('.focusItem input');
+            if (inputs.length === 0) return;
+            inputs.forEach( input => {
+                input.addEventListener('change', (e) => {
+                    const currentItem = findCurrentItem();
+                    const targetProperty = e.target.id;
+                    if (targetProperty === 'isDone'){
+                        currentItem.isDone = e.target.checked;
+                    }
+                    else {
+                        currentItem[targetProperty] = e.target.value;
+                    }
+                    console.log(currentItem)
+                })
+            })
+
+            const nextBtn = document.querySelector('.nextBtn');
+            if (!nextBtn) return;
+            nextBtn.addEventListener('click', (e) => {
+                const itemIdx = parseInt(e.target.dataset.idx);
+                const currentProject = findCurrentProject();
+                if (!(currentProject.todoList[itemIdx + 1])) {
+                    currentProject.focusItem(0);
+                    return;
+                }
+                currentProject.focusItem(itemIdx + 1);
+            })
+        },
         update: function() {
             ui.updateProjectSidebar();
             ui.updateTodoView();
             ui.updateFocusItem();
             this.addProjectListener();
             this.addTodoListener();
+            this.addFocusItemListener();
         },
     }
 })();
@@ -133,7 +164,7 @@ const createProject = function(title){
 createProject.prototype = {
     addItem: function(item){
         this.todoList.push(item);
-        UIController.update();
+        this.focusItem(this.todoList.indexOf(item))
     },
     removeItem: function(idx){
         this.todoList.splice(idx,1);
@@ -141,12 +172,10 @@ createProject.prototype = {
     },
     focusItem: function(idx){
         this.todoList.forEach( item => {
-            // console.log(this.todoList, idx)
             item === this.todoList[idx] 
                 ? item.isCurrentItem = true
                 : item.isCurrentItem = false
         });
-        console.log(this.todoList)
         UIController.update();
     }
 }

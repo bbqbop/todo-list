@@ -3,14 +3,15 @@ import { exportList as projects, findCurrentProject, findCurrentItem } from "./i
 export default function initializeUI(){
     const content = document.querySelector('.content');
 
-    const createInput = function(type, labelText, name, parentElement, value){
+    const createInput = function(type, labelText, name, parentElement, value, dataIdx){
         const label = document.createElement('legend');
         label.classList.add(name);
         label.textContent = labelText;
         const input = document.createElement('input');
         input.type = type;
-        input.id = name
-        input.value = value || ''
+        input.id = name;
+        input.value = value || '';
+        input.dataset.idx = dataIdx;
         label.append(input);
         parentElement.append(label);
     }
@@ -135,13 +136,37 @@ export default function initializeUI(){
     content.append(focusItem);
 
     const updateFocusItem = function() {
+        focusItem.innerHTML = '';
         const currentItem = findCurrentItem();
-
-        if (!currentItem) return;
+        const currentProject = findCurrentProject();
         
-        console.log(currentItem);
-        // (type, labelText, name, parentElement, value)
-        // createInput('text', '', title, focusItem, currentItem.title)
+        if (!currentItem) return;
+
+        const itemIdx = currentProject.todoList.indexOf(currentItem);
+
+        const projectTitle = document.createElement('h1');
+        projectTitle.textContent = currentProject.title;
+
+        const projectLen = document.createElement('p');
+        projectLen.textContent = `${itemIdx + 1}/${currentProject.todoList.length}`
+
+        focusItem.append(projectTitle, projectLen);
+        // (type, labelText, name, parentElement, value, dataIdx)
+        createInput('text','', 'title', focusItem, currentItem.title, itemIdx)
+        createInput('text','', 'desc', focusItem, currentItem.desc, itemIdx)
+        createInput('date','', 'dueDate', focusItem, currentItem.dueDate, itemIdx)
+        createInput('checkbox','Done', 'isDone', focusItem, false, itemIdx)
+
+        const deleteBtn = document.createElement('button');
+        deleteBtn.classList.add('todoDeleteBtns')
+        deleteBtn.textContent = 'X' 
+        deleteBtn.dataset.idx = itemIdx;
+
+        const nextBtn = document.createElement('button');
+        nextBtn.classList.add('nextBtn');
+        nextBtn.dataset.idx = itemIdx;
+        nextBtn.innerHTML = '&#x27A1;'
+        focusItem.append(deleteBtn, nextBtn);
     }
 
     
