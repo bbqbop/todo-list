@@ -18,73 +18,22 @@ export default function initializeUI(){
         return input
     }
 
-    // Add todo Task form
-
-    const taskFormWrapper = document.createElement('div');
-    taskFormWrapper.classList.add('taskFormWrapper');
-
-    const taskForm = document.createElement('form');
-    taskForm.classList.add('taskForm');
-    taskForm.id = 'taskForm';
-    taskForm.style.display = 'none';
-
-    const taskLegend = document.createElement('legend');
-    taskLegend.textContent = 'New Task:'
-    taskForm.append(taskLegend);
-
-    createInput('text','Title: ','title', taskForm);
-    createInput('text','Description: ','desc', taskForm);
-    createInput('date','Due Date: ','date', taskForm);
-    createInput('range','Priority: ','prio', taskForm);
-    createInput('submit','','submit', taskForm, 'save');
-
-    taskFormWrapper.append(taskForm)
-    content.append(taskFormWrapper);
-
-    const addRangeInputAttrs = function(selector){
-        const prioInp = document.querySelector(selector);
-        prioInp.min = '1';
-        prioInp.max = '3';
-        prioInp.step = '1';
-    }
-
-    addRangeInputAttrs('#prio');
-
-    // Add project form
-
-    const projectFormWrapper = document.createElement('div');
-    projectFormWrapper.classList.add('projectFormWrapper');
-
-    const projectForm = document.createElement('form');
-    projectForm.classList.add('projectForm');
-    projectForm.id = 'projectForm';
-    projectForm.style.display = 'none';
-
-
-    const projectLegend = document.createElement('legend');
-    projectLegend.textContent = 'New Project:'
-    projectForm.append(projectLegend);
-
-    createInput('text', 'Title: ', 'title', projectForm)
-    createInput('submit','','submit', projectForm, 'safe');
-
-    projectFormWrapper.append(projectForm);
-
-    content.append(projectFormWrapper);
-
-    
-    // Dynamic objects:
     // Project List
 
     const projectSidebar = document.createElement('div');
     projectSidebar.classList.add('projectSidebar');
     content.append(projectSidebar);
 
+    const projectList = document.createElement('div');
+    projectList.classList.add('projectList')
+    projectSidebar.append(projectList)
+
     const updateProjectSidebar = function(){
-        projectSidebar.innerHTML = '';
+        projectList.innerHTML = '';
         projects.forEach( project => {
             const div = document.createElement('div');
             div.classList.add('projects');
+            div.dataset.idx = project.idx;
 
             const btn = document.createElement('button');
             btn.dataset.idx = project.idx;
@@ -95,28 +44,59 @@ export default function initializeUI(){
             erase.textContent = 'X';
            
             div.append(btn, erase);
-            projectSidebar.append(div);
+            projectList.append(div);
+
+            if (project === findCurrentProject()){
+                div.classList.add('active')
+            }
         });  
-        const addProjectBtn = document.createElement('button');
-        addProjectBtn.classList.add('addProjectBtn');
-        addProjectBtn.textContent = '+ add new project'
-        projectSidebar.append(addProjectBtn);
     };
+
+    const addProjectBtn = document.createElement('button');
+    addProjectBtn.classList.add('addProjectBtn');
+    addProjectBtn.textContent = '+ add new project'
+    projectSidebar.append(addProjectBtn);
+
+     // Add project form
+
+     const projectFormWrapper = document.createElement('div');
+     projectFormWrapper.classList.add('projectFormWrapper');
+ 
+     const projectForm = document.createElement('form');
+     projectForm.classList.add('projectForm');
+     projectForm.id = 'projectForm';
+     projectForm.style.display = 'none';
+ 
+ 
+     const projectLegend = document.createElement('legend');
+     projectLegend.textContent = 'New Project:'
+     projectForm.append(projectLegend);
+ 
+     createInput('text', 'Title: ', 'title', projectForm)
+     createInput('submit','','submit', projectForm, 'safe');
+ 
+     projectFormWrapper.append(projectForm);
+ 
+     projectSidebar.append(projectFormWrapper);
 
 
     // Task list
    
+    const main = document.createElement('div');
+    main.classList.add('main');
+    content.append(main);
+
+    const addTaskBtn = document.createElement('button');
+    addTaskBtn.classList.add('addTaskBtn');
+    addTaskBtn.textContent = '+ add new task'
+    main.append(addTaskBtn);
+
     const todoView = document.createElement('div')
     todoView.classList.add('todoView');
-    content.append(todoView); 
+    main.append(todoView); 
 
     const updateTodoView = function() {
         todoView.innerHTML = '';
-
-        const addTaskBtn = document.createElement('button');
-        addTaskBtn.classList.add('addTaskBtn');
-        addTaskBtn.textContent = '+ add new task'
-        todoView.append(addTaskBtn);
 
         const currentProject = findCurrentProject();
 
@@ -134,7 +114,12 @@ export default function initializeUI(){
             title.textContent = task.title;
             title.dataset.idx = taskIdx;
 
+            if (task === findCurrentTask()){
+                div.classList.add('active')
+            }
+
             const priority = document.createElement('div');
+            priority.classList.add('taskPriority')
             if (task.isDone) priority.style.backgroundColor = 'green';
             else if (task.prio == 1) priority.style.backgroundColor = 'yellow';
             else if (task.prio == 2) priority.style.backgroundColor = 'orange';
@@ -154,14 +139,13 @@ export default function initializeUI(){
             div.append(title, priority, checkbox, deleteBtn);
             todoView.append(div);
         }
-        
     }
 
     // Focussed Task 
 
     const focusTask = document.createElement('div');
     focusTask.classList.add('focusTask');
-    content.append(focusTask);
+    main.append(focusTask);
 
     const updateFocusTask = function() {
         focusTask.innerHTML = '';
@@ -219,6 +203,38 @@ export default function initializeUI(){
             }
         }
     }
+
+    // Add todo Task form
+
+    const taskFormWrapper = document.createElement('div');
+    taskFormWrapper.classList.add('taskFormWrapper');
+
+    const taskForm = document.createElement('form');
+    taskForm.classList.add('taskForm');
+    taskForm.id = 'taskForm';
+    taskForm.style.display = 'none';
+
+    const taskLegend = document.createElement('legend');
+    taskLegend.textContent = 'New Task:'
+    taskForm.append(taskLegend);
+
+    createInput('text','Title: ','title', taskForm);
+    createInput('text','Description: ','desc', taskForm);
+    createInput('date','Due Date: ','date', taskForm);
+    createInput('range','Priority: ','prio', taskForm);
+    createInput('submit','','submit', taskForm, 'save');
+
+    taskFormWrapper.append(taskForm)
+    main.append(taskFormWrapper);
+
+    const addRangeInputAttrs = function(selector){
+        const prioInp = document.querySelector(selector);
+        prioInp.min = '1';
+        prioInp.max = '3';
+        prioInp.step = '1';
+    }
+
+    addRangeInputAttrs('#prio');
 
     
 
