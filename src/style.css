@@ -1,14 +1,22 @@
 * {
     box-sizing: border-box;
-    --gray: rgb(128, 128, 128, 0.2)
+    --gray: rgb(128, 128, 128, 0.2);
+    --blue: rgb(2, 116, 255, 0.5);
 }
 
 button {
     background-color: inherit;
+    margin: 0;
+    border: solid 1px rgb(118 118 118);
+    border-radius: 2px;
+}
+.addProjectBtn:hover, .addTaskBtn:hover {
+    border: solid 1px rgb(84, 84, 84);
+    background-color: var(--gray);
 }
 
 .active {
-    background-color: rgb(0, 0, 255, 0.5);
+    background-color: var(--blue);
 }
 
 .content {
@@ -18,13 +26,18 @@ button {
 
 /* sidebar */
 
-.projectSidebar {
-
+.projects {
+    display: grid;
+    grid-template-columns: 1fr 1.5rem;
+    grid-auto-rows: 1.5rem;
+    border: solid 1px gray;
+    border-radius: 2px;
 }
 
-.projectWrapper:hover {
+.projects:hover {
     background-color: var(--gray);
 }
+
 
 /* main */
 
@@ -56,10 +69,14 @@ button {
     background-color: var(--gray);
 }
 
-.todos * {
+.todos *, .projects * {
     margin: 0;
-    border: none;
+    border: solid 1px rgb(118 118 118);
     border-radius: 2px;
     height: 100%;
     width: 100%;
+}
+
+.todos *:hover, .projects *:hover {
+    border: solid 1px rgb(84, 84, 84);
 }

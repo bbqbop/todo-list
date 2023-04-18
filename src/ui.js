@@ -31,9 +31,6 @@ export default function initializeUI(){
     const updateProjectSidebar = function(){
         projectList.innerHTML = '';
         projects.forEach( project => {
-            const projectWrapper = document.createElement('div');
-            projectWrapper.classList.add('projectWrapper');
-
             const div = document.createElement('div');
             div.classList.add('projects');
             div.dataset.idx = project.idx;
@@ -47,11 +44,11 @@ export default function initializeUI(){
             erase.textContent = 'X';
            
             div.append(btn, erase);
-            projectWrapper.append(div);
-            projectList.append(projectWrapper);
+            
+            projectList.append(div);
 
             if (project === findCurrentProject()){
-                div.classList.add('active')
+                btn.classList.add('active')
             }
         });  
     };
