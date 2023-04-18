@@ -53,14 +53,28 @@ const ui = initializeUI();
 const UIController = (function eventListeners(){
     document.addEventListener('submit', (e) => {
         e.preventDefault();
-        if(e.target.id === 'taskForm') handleUserInput.createTask(e);
-        if(e.target.id === 'projectForm') handleUserInput.createProject(e);
+        if(e.target.id === 'taskForm') {
+            handleUserInput.createTask(e);
+            handleUserInput.toggleForm('task')
+        }
+        if(e.target.id === 'projectForm') {
+            handleUserInput.createProject(e);
+            handleUserInput.toggleForm('project')
+        }
         const forms = document.querySelectorAll('form');
-        forms.forEach(form => {
-            form.reset();
-            form.style.display = 'none'
-        })
+        forms.forEach(form => form.reset())
     });
+
+    const addProjectBtn = document.querySelector('.addProjectBtn');
+    addProjectBtn.addEventListener('click', (e) => {
+        handleUserInput.toggleForm('project');
+    })
+
+    const addTaskBtn = document.querySelector('.addTaskBtn');
+    addTaskBtn.addEventListener('click', () => {
+        handleUserInput.toggleForm('task');
+    })
+
     return {
         addProjectListener: function() {
             const deleteBtns = document.querySelectorAll('.projects button ~ button');
@@ -73,15 +87,6 @@ const UIController = (function eventListeners(){
             projectBtns.forEach(button => {
                 button.removeEventListener('click', (e) => handleUserInput.focusProject(e))
                 button.addEventListener('click', (e) => handleUserInput.focusProject(e))
-            })
-
-            const addProjectBtn = document.querySelector('.addProjectBtn');
-            addProjectBtn.addEventListener('click', () => {
-                const projectForm = document.querySelector('.projectForm');
-                projectForm.style.display = 'block'
-                const firstInput = document.querySelector('.projectForm input');
-                firstInput.focus();
-                this.update();
             })
         },
         addTaskListener: function() {
@@ -97,18 +102,8 @@ const UIController = (function eventListeners(){
             })
 
             const checkboxes = document.querySelectorAll('.todos input[type ="checkbox"');
-            console.log(checkboxes)
             checkboxes.forEach(checkbox => {
                 checkbox.addEventListener('change', (e) => handleUserInput.updateTask(e))
-            })
-
-            const addTaskBtn = document.querySelector('.addTaskBtn');
-            addTaskBtn.addEventListener('click', () => {
-                const taskForm = document.querySelector('.taskForm');
-                taskForm.style.display = 'block'
-                const firstInput = document.querySelector('.taskForm input');
-                firstInput.focus();
-                this.update();
             })
         },
         addFocusTaskListener: function() {
@@ -232,6 +227,12 @@ const handleUserInput = {
     focusProject : function(e){
         projects.focus(this.getIdx(e));
     }, 
+    toggleForm : function(target) {
+        const form = document.querySelector(`.${target}Form`);
+        form.classList.toggle('toggleForm')
+        const firstInput = document.querySelector(`.${target}Form input`);
+        firstInput.focus();
+    },
     getIdx : function(e){
         return parseInt(e.target.dataset.idx);
     }

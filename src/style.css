@@ -2,15 +2,25 @@
     box-sizing: border-box;
     --gray: rgb(128, 128, 128, 0.2);
     --blue: rgb(2, 116, 255, 0.5);
+    --comp: rgb(255, 141, 2, 0.5);
 }
 
+.content {
+    display: grid;
+    grid-template-columns: 200px 1fr;
+    gap: 20px;
+}
+
+/* general settings */
+
 button {
-    background-color: inherit;
+    background-color: white;
     margin: 0;
     border: solid 1px rgb(118 118 118);
     border-radius: 2px;
 }
-.addProjectBtn:hover, .addTaskBtn:hover {
+
+button:hover, input:hover{
     border: solid 1px rgb(84, 84, 84);
     background-color: var(--gray);
 }
@@ -18,10 +28,35 @@ button {
 .active {
     background-color: var(--blue);
 }
+.active:hover {
+    background-color: rgb(2, 116, 255, 0.8);
+}
+.blur {
+    filter: blur(0.5);
+}
 
-.content {
-    display: grid;
-    grid-template-columns: 200px 1fr;
+form {
+    display: none;
+}
+
+.toggleForm {
+    display: block;
+}
+
+.taskPriority {
+    height: 1.5rem;
+}
+
+.projects, .todos {
+    background-color: var(--gray);
+}
+
+.addProjectBtn {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 1.5rem;
+    width: 100%;
 }
 
 /* sidebar */
@@ -61,15 +96,15 @@ button {
     display: grid;
     grid-template-columns: 1fr repeat(3, 1.5rem);
     grid-auto-rows: 1.5rem;
-    border: solid 1px gray;
-    border-radius: 2px;
+    /* border: solid 1px gray; */
+    /* border-radius: 2px; */
 }
 
 .todos:hover {
     background-color: var(--gray);
 }
 
-.todos *, .projects * {
+.todos>*, .projects>* {
     margin: 0;
     border: solid 1px rgb(118 118 118);
     border-radius: 2px;
@@ -77,6 +112,12 @@ button {
     width: 100%;
 }
 
-.todos *:hover, .projects *:hover {
+.todos>*:hover, .projects>*:hover {
     border: solid 1px rgb(84, 84, 84);
+}
+
+.todos button {
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }

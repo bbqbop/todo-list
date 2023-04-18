@@ -1,4 +1,5 @@
 import { exportList as projects, findCurrentProject, findCurrentTask } from "./index.js";
+import { iconPlus, iconMinus } from "./icons.js";
 
 export default function initializeUI(){
     const content = document.querySelector('.content');
@@ -17,7 +18,7 @@ export default function initializeUI(){
 
         return input
     }
-
+    
     // Project List
 
     const projectSidebar = document.createElement('div');
@@ -55,7 +56,20 @@ export default function initializeUI(){
 
     const addProjectBtn = document.createElement('button');
     addProjectBtn.classList.add('addProjectBtn');
-    addProjectBtn.textContent = '+ add new project'
+    addProjectBtn.append(iconPlus);
+    addProjectBtn.addEventListener('click', () => {
+        toggleProjectBtn();
+    })
+    const toggleProjectBtn = function() {
+        if (addProjectBtn.firstChild === iconPlus){
+            addProjectBtn.textContent = '';
+            addProjectBtn.append(iconMinus);
+        } 
+        else {
+            addProjectBtn.textContent = '';
+            addProjectBtn.append(iconPlus);
+        } 
+    }
     projectSidebar.append(addProjectBtn);
 
      // Add project form
@@ -66,9 +80,10 @@ export default function initializeUI(){
      const projectForm = document.createElement('form');
      projectForm.classList.add('projectForm');
      projectForm.id = 'projectForm';
-     projectForm.style.display = 'none';
- 
- 
+     projectForm.addEventListener('submit', () => {
+        toggleProjectBtn();
+     })
+  
      const projectLegend = document.createElement('legend');
      projectLegend.textContent = 'New Project:'
      projectForm.append(projectLegend);
@@ -89,7 +104,23 @@ export default function initializeUI(){
 
     const addTaskBtn = document.createElement('button');
     addTaskBtn.classList.add('addTaskBtn');
-    addTaskBtn.textContent = '+ add new task'
+    const p = document.createElement('p');
+    p.textContent = '+ add new task';
+    addTaskBtn.append(p);
+    addTaskBtn.addEventListener('click', () => {
+       toggleTaskBtn();
+    })
+    
+    const toggleTaskBtn = function() {
+        if (addTaskBtn.firstChild === p){
+            addTaskBtn.textContent = '';
+            addTaskBtn.append(iconMinus);
+        } 
+        else {
+            addTaskBtn.textContent = '';
+            addTaskBtn.append(p);
+        } 
+    }
     main.append(addTaskBtn);
 
     const todoView = document.createElement('div')
@@ -150,31 +181,41 @@ export default function initializeUI(){
 
     const updateFocusTask = function() {
         focusTask.innerHTML = '';
-        const currentTask = findCurrentTask();
-        const currentProject = findCurrentProject();
+        const task = findCurrentTask();
+        const project = findCurrentProject();
         
-        if (!currentTask) return;
-
-        const taskIdx = currentProject.todoList.indexOf(currentTask);
+        if (!task) {
+            return;
+        }
+        const taskIdx = project.todoList.indexOf(task);
 
         const projectTitle = document.createElement('h1');
-        projectTitle.textContent = currentProject.title;
+        projectTitle.textContent = project.title;
 
         const projectLen = document.createElement('p');
-        projectLen.textContent = `${taskIdx + 1}/${currentProject.todoList.length}`
+        projectLen.textContent = `${taskIdx + 1}/${project.todoList.length}`
 
         focusTask.append(projectTitle, projectLen);
         // (type, labelText, name, parentElement, value, dataIdx)
-        createInput('text','', 'title', focusTask, currentTask.title, taskIdx);
-        createInput('text','', 'desc', focusTask, currentTask.desc, taskIdx);
-        createInput('date','', 'dueDate', focusTask, currentTask.dueDate, taskIdx);
-        createInput('range','Priority: ' ,'prio', focusTask, currentTask.prio, taskIdx)
-        createInput('checkbox','Done', 'isDone', focusTask, currentTask.isDone, taskIdx);
+        createInput('text','', 'title', focusTask, task.title, taskIdx);
+        createInput('text','', 'desc', focusTask, task.desc, taskIdx);
+        createInput('date','', 'dueDate', focusTask, task.dueDate, taskIdx);
+        createInput('range','Priority: ' ,'prio', focusTask, task.prio, taskIdx);
+
+        const priority = document.createElement('div');
+        priority.classList.add('taskPriority')
+        if (task.isDone) priority.style.backgroundColor = 'green';
+        else if (task.prio == 1) priority.style.backgroundColor = 'yellow';
+        else if (task.prio == 2) priority.style.backgroundColor = 'orange';
+        else if (task.prio == 3) priority.style.backgroundColor = 'red';
+        focusTask.append(priority);
+
+        createInput('checkbox','Done', 'isDone', focusTask, task.isDone, taskIdx);
         addRangeInputAttrs('.focusTask #prio');
 
         const checkbox = document.querySelector('.focusTask input[type = "checkbox"]')
-        checkbox.checked = currentTask.isDone;
-        document.querySelector('.focusTask input[type = "range"]').disabled = currentTask.isDone;
+        checkbox.checked = task.isDone;
+        document.querySelector('.focusTask input[type = "range"]').disabled = task.isDone;
 
         const deleteBtn = document.createElement('button');
         deleteBtn.classList.add('todoDeleteBtns')
@@ -186,23 +227,6 @@ export default function initializeUI(){
         nextBtn.dataset.idx = taskIdx;
         nextBtn.innerHTML = '&#x27A1;'
         focusTask.append(deleteBtn, nextBtn);
-
-        if ( currentTask.isDone ) {
-            focusTask.style.backgroundColor = 'green';
-        }
-        else {
-            switch (parseInt(currentTask.prio)){
-                case 1 : 
-                    focusTask.style.backgroundColor = 'yellow';
-                    break;
-                case 2 : 
-                    focusTask.style.backgroundColor = 'orange';
-                    break;
-                case 3 : 
-                    focusTask.style.backgroundColor = 'red';
-                    break;
-            }
-        }
     }
 
     // Add todo Task form
@@ -213,7 +237,9 @@ export default function initializeUI(){
     const taskForm = document.createElement('form');
     taskForm.classList.add('taskForm');
     taskForm.id = 'taskForm';
-    taskForm.style.display = 'none';
+    taskForm.addEventListener('submit', () => {
+        toggleTaskBtn();
+    })
 
     const taskLegend = document.createElement('legend');
     taskLegend.textContent = 'New Task:'
