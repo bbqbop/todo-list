@@ -1,5 +1,6 @@
 import initializeUI from './ui';
 import css from './style.css';
+import { iconPlus, iconMinus } from "./icons.js";
 
 export { exportList, findCurrentProject, findCurrentTask }
 
@@ -56,6 +57,7 @@ const UIController = (function eventListeners(){
         if(e.target.id === 'taskForm') {
             handleUserInput.createTask(e);
             handleUserInput.toggleForm('task')
+            handleUserInput.toggleBlur();
         }
         if(e.target.id === 'projectForm') {
             handleUserInput.createProject(e);
@@ -73,6 +75,7 @@ const UIController = (function eventListeners(){
     const addTaskBtn = document.querySelector('.addTaskBtn');
     addTaskBtn.addEventListener('click', () => {
         handleUserInput.toggleForm('task');
+        handleUserInput.toggleBlur();
     })
 
     return {
@@ -232,6 +235,27 @@ const handleUserInput = {
         form.classList.toggle('toggleForm')
         const firstInput = document.querySelector(`.${target}Form input`);
         firstInput.focus();
+        this.toggleBtn(target);
+    },
+    toggleBtn : function(target) {
+        target = target[0].toUpperCase() + target.slice(1);
+        const btn = document.querySelector(`.add${target}Btn`)
+        
+        if (btn.firstChild !== iconMinus){
+            btn.textContent = '';
+            btn.append(iconMinus);
+        } 
+        else if ( target === 'Project' ){ 
+            btn.textContent = '';
+            btn.append(iconPlus);
+        } 
+        else {
+            btn.textContent = '+ add new task'
+        }
+    },
+    toggleBlur : function() {
+        const elementsToBlur = document.querySelectorAll('.todoView, .focusTask');
+        elementsToBlur.forEach(element => element.classList.toggle('blur'));
     },
     getIdx : function(e){
         return parseInt(e.target.dataset.idx);
@@ -239,6 +263,5 @@ const handleUserInput = {
 }
 
 UIController.update();
-
 
 

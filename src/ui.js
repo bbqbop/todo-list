@@ -57,19 +57,7 @@ export default function initializeUI(){
     const addProjectBtn = document.createElement('button');
     addProjectBtn.classList.add('addProjectBtn');
     addProjectBtn.append(iconPlus);
-    addProjectBtn.addEventListener('click', () => {
-        toggleProjectBtn();
-    })
-    const toggleProjectBtn = function() {
-        if (addProjectBtn.firstChild === iconPlus){
-            addProjectBtn.textContent = '';
-            addProjectBtn.append(iconMinus);
-        } 
-        else {
-            addProjectBtn.textContent = '';
-            addProjectBtn.append(iconPlus);
-        } 
-    }
+   
     projectSidebar.append(addProjectBtn);
 
      // Add project form
@@ -80,10 +68,7 @@ export default function initializeUI(){
      const projectForm = document.createElement('form');
      projectForm.classList.add('projectForm');
      projectForm.id = 'projectForm';
-     projectForm.addEventListener('submit', () => {
-        toggleProjectBtn();
-     })
-  
+
      const projectLegend = document.createElement('legend');
      projectLegend.textContent = 'New Project:'
      projectForm.append(projectLegend);
@@ -107,20 +92,6 @@ export default function initializeUI(){
     const p = document.createElement('p');
     p.textContent = '+ add new task';
     addTaskBtn.append(p);
-    addTaskBtn.addEventListener('click', () => {
-       toggleTaskBtn();
-    })
-    
-    const toggleTaskBtn = function() {
-        if (addTaskBtn.firstChild === p){
-            addTaskBtn.textContent = '';
-            addTaskBtn.append(iconMinus);
-        } 
-        else {
-            addTaskBtn.textContent = '';
-            addTaskBtn.append(p);
-        } 
-    }
     main.append(addTaskBtn);
 
     const todoView = document.createElement('div')
@@ -237,10 +208,7 @@ export default function initializeUI(){
     const taskForm = document.createElement('form');
     taskForm.classList.add('taskForm');
     taskForm.id = 'taskForm';
-    taskForm.addEventListener('submit', () => {
-        toggleTaskBtn();
-    })
-
+  
     const taskLegend = document.createElement('legend');
     taskLegend.textContent = 'New Task:'
     taskForm.append(taskLegend);
