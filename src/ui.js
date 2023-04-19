@@ -25,9 +25,12 @@ export default function initializeUI(){
     projectSidebar.classList.add('projectSidebar');
     content.append(projectSidebar);
 
+    const logo = document.createElement('h1');
+    logo.textContent = 'Todo-List'
+    
     const projectList = document.createElement('div');
     projectList.classList.add('projectList')
-    projectSidebar.append(projectList)
+    projectSidebar.append(logo, projectList)
 
     const updateProjectSidebar = function(){
         projectList.innerHTML = '';
@@ -90,7 +93,7 @@ export default function initializeUI(){
     const addTaskBtn = document.createElement('button');
     addTaskBtn.classList.add('addTaskBtn');
     const p = document.createElement('p');
-    p.textContent = '+ add new task';
+    p.textContent = '+ add new task (space)';
     addTaskBtn.append(p);
     main.append(addTaskBtn);
 
@@ -128,18 +131,24 @@ export default function initializeUI(){
             else if (task.prio == 2) priority.style.backgroundColor = 'orange';
             else if (task.prio == 3) priority.style.backgroundColor = 'red';
 
+            const checkboxContainer = document.createElement('label');
+            checkboxContainer.classList.add('checkboxContainer');
             const checkbox = document.createElement('input');
             checkbox.dataset.idx = taskIdx;
             checkbox.type = 'checkbox';
             checkbox.id = 'isDone';
+            checkbox.classList.add('checkbox');
             checkbox.checked = task.isDone;
+            const checkMark = document.createElement('span');
+            checkMark.classList.add('checkMark');
+            checkboxContainer.append(checkbox, checkMark);
 
             const deleteBtn = document.createElement('button');
             deleteBtn.classList.add('todoDeleteBtns')
             deleteBtn.textContent = 'X' 
             deleteBtn.dataset.idx = taskIdx;
 
-            div.append(title, priority, checkbox, deleteBtn);
+            div.append(title, priority, checkboxContainer, deleteBtn);
             todoView.append(div);
         }
     }

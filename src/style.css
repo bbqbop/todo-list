@@ -1,35 +1,55 @@
+@import url('https://fonts.googleapis.com/css2?family=Londrina+Sketch&family=Roboto:wght@100;400;900&display=swap');
+
 * {
     box-sizing: border-box;
-    --gray: rgb(128, 128, 128, 0.2);
+    --graySoft: rgb(239, 239, 239);
+    --grayLight: rgb(128, 128, 128, 0.3);
+    --gray: rgb(118 118 118);
+    --grayDark: rgb(84, 84, 84);
     --blue: rgb(2, 116, 255, 0.5);
+    --blueFull: rgb(2, 116, 255, 0.8);
     --comp: rgb(255, 141, 2, 0.5);
+    --compFull: rgb(255, 141, 2, 0.8);
+    --sketch: 'Londrina Sketch', cursive;
+    font-family: 'Roboto', sans-serif;
+    transition: all 350ms;
 }
 
 .content {
     display: grid;
-    grid-template-columns: 200px 1fr;
+    grid-template-columns: clamp(150px, 15% ,250px) 1fr;
     gap: 20px;
+}
+
+@media screen and (max-width: 600px) {
+    .content {
+        display: grid;
+        grid-template-columns: 150px 1fr;
+    }
 }
 
 /* general settings */
 
-button {
-    background-color: white;
-    margin: 0;
-    border: solid 1px rgb(118 118 118);
-    border-radius: 2px;
+h1 {
+    text-align: center;
+    font-family: var(--sketch);
 }
 
-button:hover, input:hover{
-    border: solid 1px rgb(84, 84, 84);
-    background-color: var(--gray);
+button {
+    background-color: var(--graySoft);
+    margin: 0;
+}
+
+button:hover {
+    border: solid 1px var(--grayDark);
+    background-color: var(--grayLight);
 }
 
 .active {
     background-color: var(--blue);
 }
 .active:hover {
-    background-color: rgb(2, 116, 255, 0.8);
+    background-color: var(--blueFull);
 }
 .blur {
     filter:blur(15px);
@@ -45,10 +65,45 @@ form {
 
 .taskPriority {
     height: 1.5rem;
+    opacity: 0.8;
 }
 
-.projects, .todos {
-    background-color: var(--gray);
+.todos>*, .projects>* {
+    margin: 0;
+    border: 0;
+    height: 100%;
+    width: 100%;
+}
+
+/* sidebar */
+
+.projectList {
+    border: solid 1px var(--gray);
+    border-radius: 5px 5px 0 0 ;
+    border-bottom: 0;
+    overflow: hidden;
+}
+
+.projects:first-of-type button:first-of-type {
+    border-radius: 4px 0 0 0;
+}
+.projects:first-of-type button:last-of-type {
+    border-radius: 0 4px 0 0;
+}
+
+.projects {
+    display: grid;
+    grid-template-columns: 1fr 1.5rem;
+    grid-auto-rows: 1.5rem;
+    border-bottom: solid 1px var(--gray);
+}
+
+.projects :first-child {
+    border-right: solid 1px var(--gray);
+}
+
+.projects:hover {
+    background-color: var(--grayLight);
 }
 
 .addProjectBtn {
@@ -57,39 +112,38 @@ form {
     align-items: center;
     height: 1.5rem;
     width: 100%;
+    background-color: var(--comp);
+    border: solid 1px var(--gray);
+    border-top: 0;
+    border-radius: 0 0 5px 5px;
 }
 
-/* sidebar */
-
-.projects {
-    display: grid;
-    grid-template-columns: 1fr 1.5rem;
-    grid-auto-rows: 1.5rem;
-    border: solid 1px gray;
-    border-radius: 2px;
+.addProjectBtn:hover {
+    background-color: var(--compFull);
 }
-
-.projects:hover {
-    background-color: var(--gray);
-}
-
 
 /* main */
 
 .main {
-    max-width: 800px;
+    margin-top: 25px;
+    width: clamp(200px, 80%, 800px);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
 }
 
 .addTaskBtn {
-    width: 500px;
+    width: 80%;
+    height: 3rem;
+    border-radius: 5px 5px 0 0;
+    border: solid 1px var(--gray);
 }
+
 
 .todoView {
     height: 40vh;
-}
-
-.focusTask {
-    height: 40vh;
+    width: 80%;
+    overflow: auto;
 }
 
 .main .todos * {
@@ -100,30 +154,122 @@ form {
     display: grid;
     grid-template-columns: 1fr repeat(3, 1.5rem);
     grid-auto-rows: 1.5rem;
-    /* border: solid 1px gray; */
-    /* border-radius: 2px; */
-}
-
-.todos:hover {
-    background-color: var(--gray);
-}
-
-.todos>*, .projects>* {
-    margin: 0;
-    border: solid 1px rgb(118 118 118);
-    border-radius: 2px;
-    height: 100%;
     width: 100%;
+    border-left: solid 1px var(--gray);
+    border-right: solid 1px var(--gray);
+    border-bottom: solid 1px var(--gray);
 }
 
-.todos>*:hover, .projects>*:hover {
-    border: solid 1px rgb(84, 84, 84);
+.todos:nth-child(odd) button, .todos:nth-child(odd) .checkMark {
+    background-color: white;
 }
+.todos:nth-child(odd) button:hover, .todos:nth-child(odd) .checkMark:hover {
+    background-color: var(--grayLight);
+}
+.todos:nth-child(odd) button.active {
+    background-color: var(--blue);
+}
+.todos:nth-child(odd) button.active:hover {
+    background-color: var(--blueFull);
+}
+.todos :nth-child(1), .todos :nth-child(2) {
+    border-right: solid 1px var(--gray);
+}
+.todos:last-child {
+    border-radius: 0 0 5px 5px;
+    overflow: hidden;
+}
+.todos:last-child :first-child {
+    border-radius: 0 0 0 4px;
+}
+.todos:last-child button:nth-of-type(2) {
+    border-radius: 0 0 4px 0;
+}
+
+/* .todos>*:hover, .projects>*:hover {
+    border: solid 1px rgb(84, 84, 84);
+} */
 
 .todos button {
     display: flex;
     justify-content: center;
     align-items: center;
+}
+
+
+
+/* checkbox */
+.checkboxContainer {
+    display: block;
+    position: relative;
+    padding-left: 0;
+    margin-bottom: 0;
+    cursor: pointer;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+  }
+  
+  /* Hide the browser's default checkbox */
+  .checkboxContainer input {
+    position: absolute;
+    opacity: 0;
+    cursor: pointer;
+    height: 0;
+    width: 0;
+  }
+  
+  /* Create a custom checkbox */
+  .checkMark {
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: 100%;
+  }
+  
+  /* On mouse-over, add a grey background color */
+  .checkboxContainer:hover input ~ .checkMark {
+    background-color: var(--grayLight);
+  }
+  
+  /* When the checkbox is checked, add a blue background */
+  .checkboxContainer input:checked ~ .checkMark {
+    background-color: var(--blue);
+  }
+  
+  /* Create the checkMark/indicator (hidden when not checked) */
+  .checkMark:after {
+    content: "";
+    position: absolute;
+    display: none;
+  }
+  
+  /* Show the checkMark when checked */
+  .checkboxContainer input:checked ~ .checkMark:after {
+    display: block;
+  }
+  
+  /* Style the checkMark/indicator */
+  .checkboxContainer .checkMark:after {
+    left: 9px;
+    top: 5px;
+    width: 5px;
+    height: 10px;
+    border: solid white;
+    border-width: 0 3px 3px 0;
+    -webkit-transform: rotate(45deg);
+    -ms-transform: rotate(45deg);
+    transform: rotate(45deg);
+  }
+
+
+
+
+
+.focusTask {
+    height: 40vh;
 }
 
 .taskForm {

@@ -70,13 +70,29 @@ const UIController = (function eventListeners(){
     const addProjectBtn = document.querySelector('.addProjectBtn');
     addProjectBtn.addEventListener('click', (e) => {
         handleUserInput.toggleForm('project');
-    })
+    });
 
     const addTaskBtn = document.querySelector('.addTaskBtn');
     addTaskBtn.addEventListener('click', () => {
         handleUserInput.toggleForm('task');
         handleUserInput.toggleBlur();
-    })
+    });
+    document.addEventListener('keydown', (e) => {
+        if (e.key === " "){
+            handleUserInput.toggleForm('task');
+            handleUserInput.toggleBlur();
+        }
+        if (e.key === "ArrowRight" || e.key === "ArrowDown"){
+            handleUserInput.focusNextTask();
+        }
+        if (e.key === "ArrowLeft" || e.key === "ArrowUp"){
+            handleUserInput.focusPrevTask();
+        }
+        if (e.key === "Backspace"){
+            const taskIdx = findCurrentProject().todoList.indexOf(findCurrentTask());
+            handleUserInput.deleteTask(taskIdx); 
+        }   
+    });
 
     return {
         addProjectListener: function() {
@@ -113,15 +129,15 @@ const UIController = (function eventListeners(){
             const inputs = document.querySelectorAll('.focusTask input');
             if (inputs.length === 0) return;
             inputs.forEach( input => {
-                input.addEventListener('change', (e) => handleUserInput.updateTask(e))
-            })
+                input.addEventListener('change', (e) => {
+                    handleUserInput.updateTask(e)
+                })
+            });
 
             const nextBtn = document.querySelector('.nextBtn');
             if (!nextBtn) return;
-            nextBtn.addEventListener('click', (e) => {
-                const currentIdx = handleUserInput.getIdx(e);
-                const newIdx = currentIdx + 1;
-                handleUserInput.focusTask(newIdx)
+            nextBtn.addEventListener('click', () => {
+                handleUserInput.focusNextTask();
             })
         },
         update: function() {
@@ -212,7 +228,7 @@ const handleUserInput = {
         UIController.update();
     },
     deleteTask : function(e){
-        const idx = this.getIdx(e);
+        const idx = Number.isInteger(e) ? e : this.getIdx(e);
         const currentProject = findCurrentProject();
         currentProject.focusTask(idx-1 ? idx-1 : 0);
         currentProject.removeTask(idx);
@@ -220,6 +236,22 @@ const handleUserInput = {
     focusTask : function(e){
         const idx = Number.isInteger(e) ? e : this.getIdx(e);
         findCurrentProject().focusTask(idx);
+        const firstInput = document.querySelector(`.focusTask input`);
+        firstInput.focus();
+    },
+    focusNextTask : function(){
+        const currentProject = findCurrentProject()
+        const currentIdx = currentProject.todoList.indexOf(findCurrentTask());
+        console.log(currentIdx);
+        const newIdx = currentIdx + 1;
+        this.focusTask(newIdx)
+    },
+    focusPrevTask : function(){
+        const currentProject = findCurrentProject()
+        const currentIdx = currentProject.todoList.indexOf(findCurrentTask());
+        console.log(currentIdx);
+        const newIdx = currentIdx - 1;
+        this.focusTask(newIdx)
     },
     createProject : function(e){
         const createProject =  Project(e.target[0].value);
@@ -250,7 +282,7 @@ const handleUserInput = {
             btn.append(iconPlus);
         } 
         else {
-            btn.textContent = '+ add new task'
+            btn.textContent = '+ add new task (space)'
         }
     },
     toggleBlur : function() {
