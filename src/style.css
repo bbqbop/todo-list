@@ -100,6 +100,8 @@ form {
 
 .projects :first-child {
     border-right: solid 1px var(--gray);
+    max-width: 100%;
+    overflow: scroll;
 }
 
 .projects:hover {
@@ -121,6 +123,53 @@ form {
 .addProjectBtn:hover {
     background-color: var(--compFull);
 }
+
+/* project form */
+
+.projectForm {
+    justify-content: space-between;
+    margin-top: 1.5rem;
+    height: 1.5rem;
+    border: solid 1px var(--gray);
+    border-radius: 5px;
+    overflow: hidden;
+}
+
+.projectForm legend {
+    padding: 0;
+    width: auto;
+}
+
+.projectForm input {
+    min-width: none;
+    max-width: none;
+    width: 100%;
+    appearance: none;
+    border: none;
+    flex: 1;
+    margin: 0;
+    padding: 3px 7px;
+}
+.projectForm input:hover {
+    background-color: var(--grayLight);
+}
+
+.projectForm #submit {
+    width: 24px;
+    flex: 0 0 auto;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border: none;
+    border-left: solid 1px var(--gray);
+    border-radius: 0 4px 4px 0;
+    overflow: hidden;
+}
+#submit:hover {
+    border: solid 1px var(--grayDark); 
+}
+
+
 
 /* main */
 

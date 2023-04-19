@@ -1,5 +1,5 @@
 import { exportList as projects, findCurrentProject, findCurrentTask } from "./index.js";
-import { iconPlus, iconMinus } from "./icons.js";
+import { iconPlus, iconMinus, iconEnter } from "./icons.js";
 
 export default function initializeUI(){
     const content = document.querySelector('.content');
@@ -72,13 +72,13 @@ export default function initializeUI(){
      projectForm.classList.add('projectForm');
      projectForm.id = 'projectForm';
 
-     const projectLegend = document.createElement('legend');
-     projectLegend.textContent = 'New Project:'
-     projectForm.append(projectLegend);
- 
-     createInput('text', 'Title: ', 'title', projectForm)
-     createInput('submit','','submit', projectForm, 'safe');
- 
+     createInput('text', '', 'title', projectForm)
+     const submit = document.createElement('button');
+     submit.type = 'submit'
+     submit.id = 'submit';
+     submit.append(iconEnter);
+     projectForm.append(submit);   
+     
      projectFormWrapper.append(projectForm);
  
      projectSidebar.append(projectFormWrapper);

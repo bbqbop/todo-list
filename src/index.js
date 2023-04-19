@@ -1,6 +1,6 @@
 import initializeUI from './ui';
 import css from './style.css';
-import { iconPlus, iconMinus } from "./icons.js";
+import { iconPlus, iconMinus, iconEnter } from "./icons.js";
 
 export { exportList, findCurrentProject, findCurrentTask }
 
