@@ -78,7 +78,7 @@ const UIController = (function eventListeners(){
         handleUserInput.toggleBlur();
     });
     document.addEventListener('keydown', (e) => {
-        if (e.key === " "){
+        if (e.key === " " && !handleUserInput.isFormOpen){
             handleUserInput.toggleForm('task');
             handleUserInput.toggleBlur();
         }
@@ -278,6 +278,9 @@ const handleUserInput = {
         target = target[0].toUpperCase() + target.slice(1);
         const btn = document.querySelector(`.add${target}Btn`)
         
+        if (target === 'Task'){
+            this.isFormOpen = !this.isFormOpen
+        }
         if (btn.firstChild !== iconMinus){
             btn.textContent = '';
             btn.append(iconMinus);
@@ -296,7 +299,8 @@ const handleUserInput = {
     },
     getIdx : function(e){
         return parseInt(e.target.dataset.idx);
-    }
+    },
+    isFormOpen : false,
 }
 
 UIController.update();
