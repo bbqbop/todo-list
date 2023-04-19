@@ -147,6 +147,13 @@ const UIController = (function eventListeners(){
             this.addProjectListener();
             this.addTaskListener();
             this.addFocusTaskListener();
+            const focusTask = document.querySelector('.focusTask');
+            if (!findCurrentTask()){
+                focusTask.style.display = 'none';
+            }
+            else {
+                focusTask.style.display = 'block';
+            }
         },
     }
 })();
@@ -242,14 +249,12 @@ const handleUserInput = {
     focusNextTask : function(){
         const currentProject = findCurrentProject()
         const currentIdx = currentProject.todoList.indexOf(findCurrentTask());
-        console.log(currentIdx);
         const newIdx = currentIdx + 1;
         this.focusTask(newIdx)
     },
     focusPrevTask : function(){
         const currentProject = findCurrentProject()
         const currentIdx = currentProject.todoList.indexOf(findCurrentTask());
-        console.log(currentIdx);
         const newIdx = currentIdx - 1;
         this.focusTask(newIdx)
     },

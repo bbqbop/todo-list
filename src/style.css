@@ -227,6 +227,7 @@ form {
     left: 0;
     height: 100%;
     width: 100%;
+    background-color: white;
   }
   
   /* On mouse-over, add a grey background color */
@@ -264,12 +265,35 @@ form {
     transform: rotate(45deg);
   }
 
-
-
-
-
 .focusTask {
     height: 40vh;
+    background-color: var(--comp);
+    padding: 25px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    border-radius: 15px;
+    text-align: center;
+    border: solid 1px var(--gray);
+}
+.focusTask h1 {
+    margin: 0;
+}
+.focusTask input {
+    width: 100%;
+}
+
+.focusTask .wrapper {
+    height: 1.5rem;
+    display: flex;
+    justify-content: flex-end;
+}
+
+.focusTask .checkMark, .focusTask button {
+    height: 1.5rem;
+    width: 1.5rem;
+    border: solid 1px var(--gray);
 }
 
 .taskForm {

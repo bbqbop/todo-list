@@ -190,11 +190,23 @@ export default function initializeUI(){
         else if (task.prio == 3) priority.style.backgroundColor = 'red';
         focusTask.append(priority);
 
-        createInput('checkbox','Done', 'isDone', focusTask, task.isDone, taskIdx);
         addRangeInputAttrs('.focusTask #prio');
 
-        const checkbox = document.querySelector('.focusTask input[type = "checkbox"]')
+        const wrapper = document.createElement('div')
+        wrapper.classList.add('wrapper')
+        const checkboxContainer = document.createElement('label');
+        checkboxContainer.classList.add('checkboxContainer');
+        const p = document.createElement('p');
+        p.textContent = 'Done?'
+        const checkbox = document.createElement('input');
+        checkbox.dataset.idx = taskIdx;
+        checkbox.type = 'checkbox';
+        checkbox.id = 'isDone';
+        checkbox.classList.add('checkbox');
         checkbox.checked = task.isDone;
+        const checkMark = document.createElement('span');
+        checkMark.classList.add('checkMark');
+        checkboxContainer.append(checkbox, checkMark);
         document.querySelector('.focusTask input[type = "range"]').disabled = task.isDone;
 
         const deleteBtn = document.createElement('button');
@@ -206,7 +218,8 @@ export default function initializeUI(){
         nextBtn.classList.add('nextBtn');
         nextBtn.dataset.idx = taskIdx;
         nextBtn.innerHTML = '&#x27A1;'
-        focusTask.append(deleteBtn, nextBtn);
+        wrapper.append(p, checkboxContainer, deleteBtn, nextBtn)
+        focusTask.append(wrapper);
     }
 
     // Add todo Task form
