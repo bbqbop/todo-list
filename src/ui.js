@@ -73,11 +73,11 @@ export default function initializeUI(){
      projectForm.id = 'projectForm';
 
      createInput('text', '', 'title', projectForm)
-     const submit = document.createElement('button');
-     submit.type = 'submit'
-     submit.id = 'submit';
-     submit.append(iconEnter);
-     projectForm.append(submit);   
+     const formSubmit = document.createElement('button');
+     formSubmit.type = 'submit'
+     formSubmit.id = 'submit';
+     formSubmit.append(iconEnter);
+     projectForm.append(formSubmit);   
      
      projectFormWrapper.append(projectForm);
  
@@ -239,7 +239,13 @@ export default function initializeUI(){
     createInput('text','Description: ','desc', taskForm);
     createInput('date','Due Date: ','date', taskForm);
     createInput('range','Priority: ','prio', taskForm);
-    createInput('submit','','submit', taskForm, 'save');
+    
+    const taskSubmit = document.createElement('button');
+    taskSubmit.type = 'submit'
+    taskSubmit.id = 'submit';
+    const iconEnterClone = iconEnter.cloneNode(true);
+    taskSubmit.append(iconEnterClone);
+    taskForm.append(taskSubmit); 
 
     taskFormWrapper.append(taskForm)
     main.append(taskFormWrapper);

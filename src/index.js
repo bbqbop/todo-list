@@ -54,6 +54,7 @@ const ui = initializeUI();
 const UIController = (function eventListeners(){
     document.addEventListener('submit', (e) => {
         e.preventDefault();
+        // handleUserInput.isFormOpen = !handleUserInput.isFormOpen;
         if(e.target.id === 'taskForm') {
             handleUserInput.createTask(e);
             handleUserInput.toggleForm('task')
@@ -69,11 +70,13 @@ const UIController = (function eventListeners(){
 
     const addProjectBtn = document.querySelector('.addProjectBtn');
     addProjectBtn.addEventListener('click', (e) => {
+        if (handleUserInput.isFormOpen) return;
         handleUserInput.toggleForm('project');
     });
 
     const addTaskBtn = document.querySelector('.addTaskBtn');
     addTaskBtn.addEventListener('click', () => {
+        if (handleUserInput.isFormOpen) return;
         handleUserInput.toggleForm('task');
         handleUserInput.toggleBlur();
     });
@@ -272,26 +275,33 @@ const handleUserInput = {
         form.classList.toggle('toggleForm')
         const firstInput = document.querySelector(`.${target}Form input`);
         firstInput.focus();
+        this.isFormOpen = !this.isFormOpen;
         this.toggleBtn(target);
     },
     toggleBtn : function(target) {
         target = target[0].toUpperCase() + target.slice(1);
         const btn = document.querySelector(`.add${target}Btn`)
-        
+
         if (target === 'Task'){
-            this.isFormOpen = !this.isFormOpen
+            if (this.isFormOpen){
+                const minus = iconMinus.cloneNode(true);
+                btn.textContent = '';
+                btn.append(minus);
+            }
+            else {
+                btn.textContent = '+ add new task (space)'
+            }
         }
-        if (btn.firstChild !== iconMinus){
-            btn.textContent = '';
-            btn.append(iconMinus);
-        } 
-        else if ( target === 'Project' ){ 
-            btn.textContent = '';
-            btn.append(iconPlus);
-        } 
         else {
-            btn.textContent = '+ add new task (space)'
-        }
+            if (btn.firstChild !== iconMinus){
+                btn.textContent = '';
+                btn.append(iconMinus);
+            } 
+            else { 
+                btn.textContent = '';
+                btn.append(iconPlus);
+            } 
+    }
     },
     toggleBlur : function() {
         const elementsToBlur = document.querySelectorAll('.todoView, .focusTask');
