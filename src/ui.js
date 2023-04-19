@@ -218,7 +218,7 @@ export default function initializeUI(){
         nextBtn.classList.add('nextBtn');
         nextBtn.dataset.idx = taskIdx;
         nextBtn.innerHTML = '&#x27A1;'
-        wrapper.append(p, checkboxContainer, deleteBtn, nextBtn)
+        wrapper.append(checkboxContainer, deleteBtn, nextBtn)
         focusTask.append(wrapper);
     }
 
