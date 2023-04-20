@@ -52,15 +52,15 @@ button:hover {
     background-color: var(--blueFull);
 }
 .blur {
-    filter:blur(15px);
+    filter:blur(5px);
 }
 
-form {
+.taskFormWrapper, .projectFormWrapper{
     display: none;
 }
 
 .toggleForm {
-    display: flex;
+    display: block;
 }
 
 .taskPriority {
@@ -381,23 +381,37 @@ form {
 
 /* taskform */
 
-.taskForm {
+.taskFormWrapper {
     position: absolute;
     top: 25vh;
     left: calc(50vw - 100px);
+    height: 350px;
+    width: 250px;
+}
+
+.taskFormWrapper .closeBtn {
+    position: absolute;
+    right: 0;
+    top: 0;
+    width: 1.5rem;
+    height: 1.5rem;
+    border: solid 1px var(--gray);
+    border-radius: 0 4px 0 4px;
+}
+
+.taskForm {
+    display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
     padding: 25px;
-    height: 350px;
-    width: 250px;
     border-radius: 4px;
     border: solid 1px var(--gray);
     text-align: center;
     background-image: linear-gradient(var(--graySoft), var(--comp));
 }
 
-.taskForm legend:first-child {
+.taskForm legend:first-of-type {
     font-family: var(--sketch);
     color: var(--blue);
     font-size: 2rem;

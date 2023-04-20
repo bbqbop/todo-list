@@ -1,5 +1,5 @@
 import { exportList as projects, findCurrentProject, findCurrentTask } from "./index.js";
-import { iconPlus, iconMinus, iconEnter } from "./icons.js";
+import { iconPlus, iconMinus, iconEnter, iconDelete } from "./icons.js";
 
 export default function initializeUI(){
     const content = document.querySelector('.content');
@@ -227,10 +227,15 @@ export default function initializeUI(){
     const taskFormWrapper = document.createElement('div');
     taskFormWrapper.classList.add('taskFormWrapper');
 
+    const closeBtn = document.createElement('button');
+    closeBtn.classList.add('closeBtn');
+    closeBtn.id = 'task'
+    closeBtn.textContent = 'X';
+
     const taskForm = document.createElement('form');
     taskForm.classList.add('taskForm');
     taskForm.id = 'taskForm';
-  
+
     const taskLegend = document.createElement('legend');
     taskLegend.textContent = 'New Task:'
     taskForm.append(taskLegend);
@@ -247,7 +252,7 @@ export default function initializeUI(){
     taskSubmit.append(iconEnterClone);
     taskForm.append(taskSubmit); 
 
-    taskFormWrapper.append(taskForm)
+    taskFormWrapper.append(closeBtn,taskForm)
     main.append(taskFormWrapper);
 
     const addRangeInputAttrs = function(selector){

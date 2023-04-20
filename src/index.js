@@ -58,7 +58,6 @@ const UIController = (function eventListeners(){
         if(e.target.id === 'taskForm') {
             handleUserInput.createTask(e);
             handleUserInput.toggleForm('task')
-            handleUserInput.toggleBlur();
         }
         if(e.target.id === 'projectForm') {
             handleUserInput.createProject(e);
@@ -78,12 +77,16 @@ const UIController = (function eventListeners(){
     addTaskBtn.addEventListener('click', () => {
         if (handleUserInput.isFormOpen) return;
         handleUserInput.toggleForm('task');
-        handleUserInput.toggleBlur();
     });
+
+    const closeFormBtn = document.querySelector('.closeBtn');
+    closeFormBtn.addEventListener('click', (e)=> {
+        handleUserInput.toggleForm(e.target.id);
+    })
+
     document.addEventListener('keydown', (e) => {
         if (e.key === " " && !handleUserInput.isFormOpen){
             handleUserInput.toggleForm('task');
-            handleUserInput.toggleBlur();
         }
         if (e.key === "ArrowRight" || e.key === "ArrowDown"){
             handleUserInput.focusNextTask();
@@ -271,12 +274,13 @@ const handleUserInput = {
         projects.focus(this.getIdx(e));
     }, 
     toggleForm : function(target) {
-        const form = document.querySelector(`.${target}Form`);
+        const form = document.querySelector(`.${target}FormWrapper`);
         form.classList.toggle('toggleForm')
         const firstInput = document.querySelector(`.${target}Form input`);
         firstInput.focus();
         this.isFormOpen = !this.isFormOpen;
         this.toggleBtn(target);
+        this.toggleBlur(target);
     },
     toggleBtn : function(target) {
         target = target[0].toUpperCase() + target.slice(1);
@@ -303,9 +307,15 @@ const handleUserInput = {
             } 
     }
     },
-    toggleBlur : function() {
-        const elementsToBlur = document.querySelectorAll('.todoView, .focusTask');
-        elementsToBlur.forEach(element => element.classList.toggle('blur'));
+    toggleBlur : function(target) {
+        if (target === 'task'){
+            const elementsToBlur = document.querySelectorAll('.todoView, .focusTask, .projectSidebar');
+            elementsToBlur.forEach(element => element.classList.toggle('blur'));
+        }
+        else {
+            const elementsToBlur = document.querySelector('.main');
+            elementsToBlur.classList.toggle('blur');
+        }
     },
     getIdx : function(e){
         return parseInt(e.target.dataset.idx);
