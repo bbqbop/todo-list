@@ -214,16 +214,17 @@ export default function initializeUI(){
         checkboxContainer.append(checkbox, checkMark);
         document.querySelector('.focusTask input[type = "range"]').disabled = task.isDone;
 
+        const nextBtn = document.createElement('button');
+        nextBtn.classList.add('nextBtn');
+        nextBtn.dataset.idx = taskIdx;
+        nextBtn.innerHTML = '&#x27A1;'
+
         const deleteBtn = document.createElement('button');
         deleteBtn.classList.add('todoDeleteBtns')
         deleteBtn.textContent = 'X' 
         deleteBtn.dataset.idx = taskIdx;
 
-        const nextBtn = document.createElement('button');
-        nextBtn.classList.add('nextBtn');
-        nextBtn.dataset.idx = taskIdx;
-        nextBtn.innerHTML = '&#x27A1;'
-        wrapper.append(checkboxContainer, deleteBtn, nextBtn)
+        wrapper.append(checkboxContainer, nextBtn, deleteBtn)
         focusTask.append(wrapper);
     }
 

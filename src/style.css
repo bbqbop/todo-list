@@ -41,8 +41,15 @@ button {
 }
 
 button:hover {
-    border: solid 1px var(--grayDark);
     background-color: var(--grayLight);
+}
+button:active {
+    background-color: var(--grayDark);
+    color: white;
+}
+
+button:active path, button:active svg {
+    fill: white;
 }
 
 .active {
@@ -91,6 +98,16 @@ button:hover {
     border-radius: 0 4px 0 0;
 }
 
+.projects:nth-child(even) button{
+    background-color: #fff;
+}
+.projects:nth-child(even) button:hover{
+    background-color: var(--grayLight);
+}
+.projects:nth-child(even) button.active{
+    background-color: var(--blue);
+}
+
 .projects {
     display: grid;
     grid-template-columns: 1fr 1.5rem;
@@ -126,9 +143,39 @@ button:hover {
 
 /* project form */
 
-.projectForm {
-    justify-content: space-between;
+.projectFormWrapper {
+    position: relative;
     margin-top: 1.5rem;
+    height: 1.5rem;
+    width: 100%;
+}
+
+.projectFormWrapper .closeBtn {
+    position: absolute;
+    right: 0;
+    height: 1.5rem;
+    width: 1.5rem;
+    border: solid 1px var(--gray);
+    border-radius: 0 4px 4px 0;
+}
+
+
+.projectForm #submit {
+    height: 1.5rem;
+    width: 1.5rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+    border: none;
+    border-left: solid 1px var(--gray);
+}
+#submit:hover {
+}
+
+.projectForm {
+    display: grid;
+    grid-template-columns: 1fr 1.5rem calc(1.5rem - 1px);
     height: 1.5rem;
     border: solid 1px var(--gray);
     border-radius: 5px;
@@ -154,20 +201,7 @@ button:hover {
     background-color: var(--grayLight);
 }
 
-.projectForm #submit {
-    width: 24px;
-    flex: 0 0 auto;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    border: none;
-    border-left: solid 1px var(--gray);
-    border-radius: 0 4px 4px 0;
-    overflow: hidden;
-}
-#submit:hover {
-    border: solid 1px var(--grayDark); 
-}
+
 
 
 
@@ -314,6 +348,8 @@ button:hover {
     transform: rotate(45deg);
   }
 
+/* FOCUSTASK */
+
 .focusTask {
     height: 40vh;
     width: 12rem;
@@ -354,6 +390,11 @@ button:hover {
     width: 9rem;
 }
 
+.focusTask .taskPriority {
+    border-radius: 4px;
+    border: solid 1px var(--gray);
+}
+
 .focusTask .wrapper {
     width: 4.5rem;
     position: relative;
@@ -363,16 +404,21 @@ button:hover {
     display: flex;
     justify-content: flex-end;
     background: white;
+    border-radius: 0 4px 4px 0;
 }
 
-.focusTask .wrapper *:hover {
-    background-color: var(--grayLight);
+.focusTask .wrapper .checkMark, .focusTask .wrapper button:first-of-type {
+    border: solid 1px var(--gray);
+    border-right: none;
+}
+.focusTask .wrapper button:last-child {
+    border: solid 1px var(--gray);
+    border-radius: 0 4px 4px 0;
 }
 
 .focusTask .checkMark, .focusTask button {
     height: 1.5rem;
     width: 1.5rem;
-    border: solid 1px var(--gray);
 }
 
 .focusTask .checkMark {

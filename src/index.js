@@ -84,7 +84,10 @@ const UIController = (function eventListeners(){
         handleUserInput.toggleForm(e.target.id);
         })
     });
-
+const taskCloseBtn = document.createElement('button');
+    taskCloseBtn.classList.add('closeBtn');
+    taskCloseBtn.id = 'task'
+    taskCloseBtn.textContent = 'X';
     document.addEventListener('keydown', (e) => {
         if (e.key === " " && !handleUserInput.isFormOpen){
             handleUserInput.toggleForm('task');
