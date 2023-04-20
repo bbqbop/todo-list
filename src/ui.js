@@ -67,6 +67,11 @@ export default function initializeUI(){
 
      const projectFormWrapper = document.createElement('div');
      projectFormWrapper.classList.add('projectFormWrapper');
+
+     const projectCloseBtn = document.createElement('button');
+     projectCloseBtn.classList.add('closeBtn');
+     projectCloseBtn.id = 'project'
+     projectCloseBtn.textContent = 'X';
  
      const projectForm = document.createElement('form');
      projectForm.classList.add('projectForm');
@@ -79,7 +84,7 @@ export default function initializeUI(){
      formSubmit.append(iconEnter);
      projectForm.append(formSubmit);   
      
-     projectFormWrapper.append(projectForm);
+     projectFormWrapper.append(projectCloseBtn, projectForm);
  
      projectSidebar.append(projectFormWrapper);
 
@@ -227,10 +232,10 @@ export default function initializeUI(){
     const taskFormWrapper = document.createElement('div');
     taskFormWrapper.classList.add('taskFormWrapper');
 
-    const closeBtn = document.createElement('button');
-    closeBtn.classList.add('closeBtn');
-    closeBtn.id = 'task'
-    closeBtn.textContent = 'X';
+    const taskCloseBtn = document.createElement('button');
+    taskCloseBtn.classList.add('closeBtn');
+    taskCloseBtn.id = 'task'
+    taskCloseBtn.textContent = 'X';
 
     const taskForm = document.createElement('form');
     taskForm.classList.add('taskForm');
@@ -252,7 +257,7 @@ export default function initializeUI(){
     taskSubmit.append(iconEnterClone);
     taskForm.append(taskSubmit); 
 
-    taskFormWrapper.append(closeBtn,taskForm)
+    taskFormWrapper.append(taskCloseBtn,taskForm)
     main.append(taskFormWrapper);
 
     const addRangeInputAttrs = function(selector){

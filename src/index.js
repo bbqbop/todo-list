@@ -54,7 +54,6 @@ const ui = initializeUI();
 const UIController = (function eventListeners(){
     document.addEventListener('submit', (e) => {
         e.preventDefault();
-        // handleUserInput.isFormOpen = !handleUserInput.isFormOpen;
         if(e.target.id === 'taskForm') {
             handleUserInput.createTask(e);
             handleUserInput.toggleForm('task')
@@ -79,14 +78,19 @@ const UIController = (function eventListeners(){
         handleUserInput.toggleForm('task');
     });
 
-    const closeFormBtn = document.querySelector('.closeBtn');
-    closeFormBtn.addEventListener('click', (e)=> {
+    const closeFormBtn = document.querySelectorAll('.closeBtn');
+    closeFormBtn.forEach(button => {
+        button.addEventListener('click', (e)=> {
         handleUserInput.toggleForm(e.target.id);
-    })
+        })
+    });
 
     document.addEventListener('keydown', (e) => {
         if (e.key === " " && !handleUserInput.isFormOpen){
             handleUserInput.toggleForm('task');
+        }
+        if (e.key === 'Escape' && handleUserInput.isFormOpen){
+            handleUserInput.toggleForm(handleUserInput.openForm)
         }
         if (e.key === "ArrowRight" || e.key === "ArrowDown"){
             handleUserInput.focusNextTask();
@@ -279,6 +283,8 @@ const handleUserInput = {
         const firstInput = document.querySelector(`.${target}Form input`);
         firstInput.focus();
         this.isFormOpen = !this.isFormOpen;
+        this.openForm = this.isFormOpen ? target : false;
+        console.log(this.openForm);
         this.toggleBtn(target);
         this.toggleBlur(target);
     },
@@ -321,6 +327,7 @@ const handleUserInput = {
         return parseInt(e.target.dataset.idx);
     },
     isFormOpen : false,
+    openForm : false
 }
 
 UIController.update();
