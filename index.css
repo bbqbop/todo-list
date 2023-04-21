@@ -475,6 +475,12 @@ button:active path, button:active svg {
     left: -1.5rem;
 }
 
+.focusTask .nextBtn {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
 /* taskform */
 
 .taskFormWrapper {
