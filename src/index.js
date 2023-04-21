@@ -53,9 +53,16 @@ const UIController = (function eventListeners(){
         forms.forEach(form => form.reset())
     });
 
+    const hamburgerBtn = document.querySelector('.hamburgerBtn');
+    hamburgerBtn.addEventListener('click', () => {
+        const projectListWrapper = document.querySelector('.projectListWrapper');
+        projectListWrapper.classList.toggle('toggleProjectList');
+        handleUserInput.toggleBlur('hamburger');
+        handleUserInput.hamburgerOn = !handleUserInput.hamburgerOn;
+    })
+
     const addProjectBtn = document.querySelector('.addProjectBtn');
     addProjectBtn.addEventListener('click', (e) => {
-        if (handleUserInput.isFormOpen) return;
         handleUserInput.toggleForm('project');
     });
 
@@ -297,11 +304,16 @@ const handleUserInput = {
     }
     },
     toggleBlur : function(target) {
+        if (target === 'hamburger') {
+            const elementsToBlur = document.querySelector('.main')
+            elementsToBlur.classList.toggle('blur');
+        }
         if (target === 'task'){
             const elementsToBlur = document.querySelectorAll('.todoView, .focusTask, .projectSidebar');
             elementsToBlur.forEach(element => element.classList.toggle('blur'));
         }
-        else {
+        if (target === 'project') {
+            if (this.hamburgerOn) return;
             const elementsToBlur = document.querySelector('.main');
             elementsToBlur.classList.toggle('blur');
         }
@@ -310,7 +322,8 @@ const handleUserInput = {
         return parseInt(e.target.dataset.idx);
     },
     isFormOpen : false,
-    openForm : false
+    openForm : false,
+    hamburgerOn : false,
 }
 
 

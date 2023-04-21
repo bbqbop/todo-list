@@ -1,5 +1,5 @@
 import { projects } from "./index.js";
-import { iconPlus, iconMinus, iconEnter, iconDelete } from "./icons.js";
+import { iconPlus, iconMinus, iconEnter, iconHamburger } from "./icons.js";
 
 export default function initializeUI(){
 
@@ -29,15 +29,20 @@ export default function initializeUI(){
     const logo = document.createElement('h1');
     logo.textContent = 'Todo-List'
     
+    const hamburgerBtn = document.createElement('button');
+    hamburgerBtn.classList.add('hamburgerBtn');
+    hamburgerBtn.append(iconHamburger);
+
+    const projectListWrapper = document.createElement('div');
+    projectListWrapper.classList.add('projectListWrapper');
+
     const projectList = document.createElement('div');
     projectList.classList.add('projectList')
-    projectSidebar.append(logo, projectList)
+    // projectSidebar.append(logo, hamburgerBtn, projectList)
    
     const addProjectBtn = document.createElement('button');
     addProjectBtn.classList.add('addProjectBtn');
     addProjectBtn.append(iconPlus);
-   
-    projectSidebar.append(addProjectBtn);
 
      // Add project form
 
@@ -62,7 +67,8 @@ export default function initializeUI(){
      
      projectFormWrapper.append(projectCloseBtn, projectForm);
  
-     projectSidebar.append(projectFormWrapper);
+     projectListWrapper.append(projectList, addProjectBtn, projectFormWrapper);
+     projectSidebar.append(logo, hamburgerBtn, projectListWrapper);
 
 
     // Task list
