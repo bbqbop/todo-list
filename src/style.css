@@ -19,6 +19,8 @@
     display: grid;
     grid-template-columns: clamp(150px, 15% ,250px) 1fr;
     gap: 20px;
+    width: 100vw;
+
 }
 
 .hamburgerBtn {
