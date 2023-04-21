@@ -141,6 +141,14 @@ const UIController = (function eventListeners(){
                     handleUserInput.updateTask(e)
                 })
             });
+            inputs.forEach( input => {
+                input.addEventListener('focus', () => {
+                    handleUserInput.isFormOpen = !handleUserInput.isFormOpen
+                });
+                input.addEventListener('blur', () => {
+                    handleUserInput.isFormOpen = !handleUserInput.isFormOpen
+                })
+            })
 
             const nextBtn = document.querySelector('.nextBtn');
             if (!nextBtn) return;
