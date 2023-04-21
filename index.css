@@ -26,12 +26,15 @@
     gap: 20px;
 }
 
-@media screen and (max-width: 600px) {
+/* @media screen and (max-width: 600px) {
     .content {
         display: grid;
         grid-template-columns: 150px 1fr;
     }
-}
+    .projectList {
+        display: none;
+    }
+} */
 
 /* general settings */
 
@@ -175,8 +178,7 @@ button:active path, button:active svg {
     border: none;
     border-left: solid 1px var(--gray);
 }
-#submit:hover {
-}
+
 
 .projectForm {
     display: grid;
