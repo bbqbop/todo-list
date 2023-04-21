@@ -1,5 +1,5 @@
 import { projects } from "./index.js";
-import { iconPlus, iconMinus, iconEnter, iconHamburger } from "./icons.js";
+import { icons } from "./icons.js";
 
 export default function initializeUI(){
 
@@ -31,7 +31,7 @@ export default function initializeUI(){
     
     const hamburgerBtn = document.createElement('button');
     hamburgerBtn.classList.add('hamburgerBtn');
-    hamburgerBtn.append(iconHamburger);
+    hamburgerBtn.append(icons.hamburger);
 
     const projectListWrapper = document.createElement('div');
     projectListWrapper.classList.add('projectListWrapper');
@@ -42,7 +42,7 @@ export default function initializeUI(){
    
     const addProjectBtn = document.createElement('button');
     addProjectBtn.classList.add('addProjectBtn');
-    addProjectBtn.append(iconPlus);
+    addProjectBtn.append(icons.plus);
 
      // Add project form
 
@@ -62,7 +62,7 @@ export default function initializeUI(){
      const formSubmit = document.createElement('button');
      formSubmit.type = 'submit'
      formSubmit.id = 'submit';
-     formSubmit.append(iconEnter);
+     formSubmit.append(icons.enter);
      projectForm.append(formSubmit);   
      
      projectFormWrapper.append(projectCloseBtn, projectForm);
@@ -120,7 +120,7 @@ export default function initializeUI(){
     const taskSubmit = document.createElement('button');
     taskSubmit.type = 'submit'
     taskSubmit.id = 'submit';
-    const iconEnterClone = iconEnter.cloneNode(true);
+    const iconEnterClone = icons.enter.cloneNode(true);
     taskSubmit.append(iconEnterClone);
     taskForm.append(taskSubmit); 
 
@@ -271,7 +271,7 @@ export default function initializeUI(){
             const nextBtn = document.createElement('button');
             nextBtn.classList.add('nextBtn');
             nextBtn.dataset.idx = taskIdx;
-            nextBtn.innerHTML = '&#x27A1;'
+            nextBtn.append(icons.next);
     
             const deleteBtn = document.createElement('button');
             deleteBtn.classList.add('todoDeleteBtns')

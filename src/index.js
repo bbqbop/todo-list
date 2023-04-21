@@ -1,6 +1,6 @@
 import initializeUI from './ui';
 import css from './style.css';
-import { iconPlus, iconMinus, iconEnter } from "./icons.js";
+import { icons } from "./icons.js";
 
 export { projects }
 
@@ -293,7 +293,7 @@ const handleUserInput = {
 
         if (target === 'Task'){
             if (this.isFormOpen){
-                const minus = iconMinus.cloneNode(true);
+                const minus = icons.minus.cloneNode(true);
                 btn.textContent = '';
                 btn.append(minus);
             }
@@ -302,13 +302,13 @@ const handleUserInput = {
             }
         }
         else {
-            if (btn.firstChild !== iconMinus){
+            if (btn.firstChild !== icons.minus){
                 btn.textContent = '';
-                btn.append(iconMinus);
+                btn.append(icons.minus);
             } 
             else { 
                 btn.textContent = '';
-                btn.append(iconPlus);
+                btn.append(icons.plus);
             } 
     }
     },
