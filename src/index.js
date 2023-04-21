@@ -55,6 +55,7 @@ const UIController = (function eventListeners(){
 
     const hamburgerBtn = document.querySelector('.hamburgerBtn');
     hamburgerBtn.addEventListener('click', () => {
+        if (handleUserInput.isFormOpen) return;
         const projectListWrapper = document.querySelector('.projectListWrapper');
         projectListWrapper.classList.toggle('toggleProjectList');
         handleUserInput.toggleBlur('hamburger');
