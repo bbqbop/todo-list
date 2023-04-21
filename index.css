@@ -58,7 +58,6 @@
         transform: scale(1);
     }
     .projectListWrapper {
-        background-color: #fff;
         z-index: 2;
         transform: scale(0);
         position: absolute;
