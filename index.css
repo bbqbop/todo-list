@@ -26,17 +26,59 @@
     gap: 20px;
 }
 
-/* @media screen and (max-width: 600px) {
+.hamburgerBtn {
+    position: absolute;
+    right: 0;
+    top: 0;
+    transform: scale(0);
+    border: solid 1px var(--gray);
+    height: 3rem;
+    width: 3rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 0 0 0 5px;
+}
+
+@media screen and (max-width: 600px) {
+    * {
+        margin: 0;
+    }
     .content {
-        display: grid;
-        grid-template-columns: 150px 1fr;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
     }
-    .projectList {
-        display: none;
+    .projectSidebar h1 {
+        margin-top: 20px;
     }
-} */
+    .hamburgerBtn {
+        transform: scale(1);
+    }
+    .projectListWrapper {
+        background-color: #fff;
+        z-index: 2;
+        transform: scale(0);
+        position: absolute;
+        right: 0;
+        top: calc(3rem - 1px);
+        width: 33vw;
+    }
+    div.projectListWrapper.toggleProjectList {
+        transform: scale(1);
+    }
+    .main .todoView {
+        height: 30vh;
+    }
+    .main .todoView, .main .addTaskBtn {
+        width: 100%;
+    }
+}
+
+
 
 /* general settings */
+
 
 h1 {
     text-align: center;
