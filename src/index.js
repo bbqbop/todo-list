@@ -242,13 +242,13 @@ const handleUserInput = {
     },
     focusNextTask : function(){
         const currentProject = projects.findCurrentProject()
-        const currentIdx = currentProject.todoList.indexOf(findCurrentTask());
+        const currentIdx = currentProject.todoList.indexOf(projects.findCurrentTask());
         const newIdx = currentIdx + 1;
         this.focusTask(newIdx)
     },
     focusPrevTask : function(){
         const currentProject = projects.findCurrentProject()
-        const currentIdx = currentProject.todoList.indexOf(findCurrentTask());
+        const currentIdx = currentProject.todoList.indexOf(projects.findCurrentTask());
         const newIdx = currentIdx - 1;
         this.focusTask(newIdx)
     },
