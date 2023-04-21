@@ -2,52 +2,39 @@ import initializeUI from './ui';
 import css from './style.css';
 import { iconPlus, iconMinus, iconEnter } from "./icons.js";
 
-export { exportList, findCurrentProject, findCurrentTask }
+export { projects }
+
+const ui = initializeUI();
 
 const projects = {
     list: [],
     erase: function(idx) {
-        this.list.splice(this.findIdx(idx), 1);
+        this.list.splice(idx, 1);
         UIController.update();
     },
     focus: function(idx) {
         this.list.forEach( entry => {
-            entry === this.list[this.findIdx(idx)]
+            entry === this.list[idx]
             ? entry.isCurrentProject = true
             : entry.isCurrentProject = false;
         })
         UIController.update();
     }, 
-    findIdx: function(idx) {
-        let arrayIdx;
-        this.list.forEach( entry => {
-            if (idx == entry.idx){
-                arrayIdx = this.list.indexOf(entry)
-            }
+    findCurrentProject : function() {
+        const currentProject = this.list.find( project => {
+            return project.isCurrentProject === true;
         })
-        return arrayIdx;
+        return currentProject;
+    },
+    findCurrentTask : function() {
+        const currentProject = this.findCurrentProject();
+        if (!currentProject) return;
+        const currentTask = currentProject.todoList.find( task => {
+            return task.isCurrentTask === true;
+        })
+        return currentTask;
     },
 };
-
-const exportList = projects.list;
-
-const findCurrentProject = function() {
-    const currentProject = projects.list.find( project => {
-        return project.isCurrentProject === true;
-    })
-    return currentProject;
-};
-
-const findCurrentTask = function() {
-    const currentProject = findCurrentProject();
-    if (!currentProject) return;
-    const currentTask = currentProject.todoList.find( task => {
-        return task.isCurrentTask === true;
-    })
-    return currentTask;
-}
-
-const ui = initializeUI();
 
 // USER INPUTS
 
@@ -84,7 +71,7 @@ const UIController = (function eventListeners(){
         handleUserInput.toggleForm(e.target.id);
         })
     });
-const taskCloseBtn = document.createElement('button');
+    const taskCloseBtn = document.createElement('button');
     taskCloseBtn.classList.add('closeBtn');
     taskCloseBtn.id = 'task'
     taskCloseBtn.textContent = 'X';
@@ -101,8 +88,8 @@ const taskCloseBtn = document.createElement('button');
         if (e.key === "ArrowLeft" || e.key === "ArrowUp"){
             handleUserInput.focusPrevTask();
         }
-        if (e.key === "Backspace"){
-            const taskIdx = findCurrentProject().todoList.indexOf(findCurrentTask());
+        if (e.key === "Backspace" && !handleUserInput.isFormOpen){
+            const taskIdx = projects.findCurrentProject().todoList.indexOf(findCurrentTask());
             handleUserInput.deleteTask(taskIdx); 
         }   
     });
@@ -154,14 +141,13 @@ const taskCloseBtn = document.createElement('button');
             })
         },
         update: function() {
-            ui.updateProjectSidebar();
-            ui.updateTodoView();
-            ui.updateFocusTask();
+            populateStorage();
+            ui.update();
             this.addProjectListener();
             this.addTaskListener();
             this.addFocusTaskListener();
             const focusTask = document.querySelector('.focusTask');
-            if (!findCurrentTask()){
+            if (!projects.findCurrentTask()){
                 focusTask.style.display = 'none';
             }
             else {
@@ -180,16 +166,13 @@ const Task = function(title, desc, dueDate, prio){
     this.isCurrentTask;
 };
 
-let projectIdx = 0
 const Project = function(title){
     let newProject = Object.create(Project.prototype);
     newProject.todoList = [];
     newProject.title = title;
-    newProject.idx = projectIdx;
     newProject.isCurrentProject;
     projects.list.push(newProject);
-    projects.focus(projectIdx);
-    projectIdx++;
+    projects.focus(projects.list.indexOf(newProject));
     
     return newProject;
 }
@@ -216,8 +199,6 @@ Project.prototype = {
     }
 }
 
-const defaultProject = Project('myTodoList');
-
 const handleUserInput = {
     createTask : function(e){
         const title = e.target[0].value;
@@ -227,7 +208,7 @@ const handleUserInput = {
 
         const task = new Task(title, desc, dueDate, prio);
 
-        let currentProject = findCurrentProject();
+        let currentProject = projects.findCurrentProject();
 
         if(!currentProject){
             currentProject = Project('myTodoList');
@@ -236,7 +217,7 @@ const handleUserInput = {
     },
     updateTask : function(e) {
         const idx = this.getIdx(e);
-        const currentTask = findCurrentProject().todoList[idx];
+        const currentTask = projects.findCurrentProject().todoList[idx];
         const targetProperty = e.target.id;
 
         if (targetProperty === 'isDone'){
@@ -249,24 +230,24 @@ const handleUserInput = {
     },
     deleteTask : function(e){
         const idx = Number.isInteger(e) ? e : this.getIdx(e);
-        const currentProject = findCurrentProject();
+        const currentProject = projects.findCurrentProject();
         currentProject.focusTask(idx-1 ? idx-1 : 0);
         currentProject.removeTask(idx);
     },
     focusTask : function(e){
         const idx = Number.isInteger(e) ? e : this.getIdx(e);
-        findCurrentProject().focusTask(idx);
+        projects.findCurrentProject().focusTask(idx);
         const firstInput = document.querySelector(`.focusTask input`);
         firstInput.focus();
     },
     focusNextTask : function(){
-        const currentProject = findCurrentProject()
+        const currentProject = projects.findCurrentProject()
         const currentIdx = currentProject.todoList.indexOf(findCurrentTask());
         const newIdx = currentIdx + 1;
         this.focusTask(newIdx)
     },
     focusPrevTask : function(){
-        const currentProject = findCurrentProject()
+        const currentProject = projects.findCurrentProject()
         const currentIdx = currentProject.todoList.indexOf(findCurrentTask());
         const newIdx = currentIdx - 1;
         this.focusTask(newIdx)
@@ -287,7 +268,6 @@ const handleUserInput = {
         firstInput.focus();
         this.isFormOpen = !this.isFormOpen;
         this.openForm = this.isFormOpen ? target : false;
-        console.log(this.openForm);
         this.toggleBtn(target);
         this.toggleBlur(target);
     },
@@ -333,6 +313,25 @@ const handleUserInput = {
     openForm : false
 }
 
-UIController.update();
 
+if (!window.localStorage.getItem('projectList')){
+    const defaultProject = Project('myProject');
+    populateStorage();
+} else {
+    setProjectsList();
+};
 
+function populateStorage() {
+    localStorage.setItem('projectList', JSON.stringify(projects.list))
+};
+
+function setProjectsList() {
+    const userData = localStorage.getItem('projectList')
+    const parsedData = JSON.parse(userData);
+
+    parsedData.forEach( project => {
+        project = Object.assign(project, Project.prototype)
+    })
+    projects.list = parsedData;
+    UIController.update()
+}
