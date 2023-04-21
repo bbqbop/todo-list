@@ -231,10 +231,10 @@ export default function initializeUI(){
     
             const priority = document.createElement('div');
             priority.classList.add('taskPriority')
-            if (task.isDone) priority.style.backgroundColor = 'green';
-            else if (task.prio == 1) priority.style.backgroundColor = 'yellow';
-            else if (task.prio == 2) priority.style.backgroundColor = 'orange';
-            else if (task.prio == 3) priority.style.backgroundColor = 'red';
+            if (currentTask.isDone) priority.style.backgroundColor = 'green';
+            else if (currentTask.prio == 1) priority.style.backgroundColor = 'yellow';
+            else if (currentTask.prio == 2) priority.style.backgroundColor = 'orange';
+            else if (currentTask.prio == 3) priority.style.backgroundColor = 'red';
             focusTask.append(priority);
     
             addRangeInputAttrs('.focusTask #prio');
@@ -250,7 +250,7 @@ export default function initializeUI(){
             checkbox.type = 'checkbox';
             checkbox.id = 'isDone';
             checkbox.classList.add('checkbox');
-            checkbox.checked = task.isDone;
+            checkbox.checked = currentTask.isDone;
             const checkMark = document.createElement('span');
             checkMark.classList.add('checkMark');
             checkboxContainer.append(checkbox, checkMark);
