@@ -136,6 +136,12 @@ export default function initializeUI(){
 
     addRangeInputAttrs('#prio');
 
+    const footer = document.createElement('div');
+    footer.classList.add('footer');
+    footer.textContent = '© Dierk Peters 2023'
+
+    content.append(footer);
+
     const update = function(){
         const currentProject = projects.findCurrentProject();
         const currentTask = projects.findCurrentTask();
