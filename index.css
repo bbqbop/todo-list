@@ -1,0 +1,494 @@
+/*!*****************************************************************!*\
+  !*** css ./node_modules/css-loader/dist/cjs.js!./src/style.css ***!
+  \*****************************************************************/
+@import url(https://fonts.googleapis.com/css2?family=Londrina+Sketch&family=Roboto:wght@100;400;900&display=swap);
+/*!*********************************************************************!*\
+  !*** css ./node_modules/css-loader/dist/cjs.js!./src/style.css (1) ***!
+  \*********************************************************************/
+* {
+    box-sizing: border-box;
+    --graySoft: rgb(239, 239, 239);
+    --grayLight: rgb(128, 128, 128, 0.3);
+    --gray: rgb(118 118 118);
+    --grayDark: rgb(84, 84, 84);
+    --blue: rgb(2, 116, 255, 0.5);
+    --blueFull: rgb(2, 116, 255, 0.8);
+    --comp: rgb(255, 141, 2, 0.5);
+    --compFull: rgb(255, 141, 2, 0.8);
+    --sketch: 'Londrina Sketch', cursive;
+    font-family: 'Roboto', sans-serif;
+    transition: all 350ms;
+}
+
+.content {
+    display: grid;
+    grid-template-columns: clamp(150px, 15% ,250px) 1fr;
+    gap: 20px;
+}
+
+@media screen and (max-width: 600px) {
+    .content {
+        display: grid;
+        grid-template-columns: 150px 1fr;
+    }
+}
+
+/* general settings */
+
+h1 {
+    text-align: center;
+    font-family: var(--sketch);
+}
+
+button {
+    background-color: var(--graySoft);
+    margin: 0;
+}
+
+button:hover {
+    background-color: var(--grayLight);
+}
+button:active {
+    background-color: var(--grayDark);
+    color: white;
+}
+
+button:active path, button:active svg {
+    fill: white;
+}
+
+.active {
+    background-color: var(--blue);
+}
+.active:hover {
+    background-color: var(--blueFull);
+}
+.blur {
+    filter:blur(5px);
+}
+
+.taskFormWrapper, .projectFormWrapper{
+    display: none;
+}
+
+.toggleForm {
+    display: block;
+}
+
+.taskPriority {
+    height: 1.5rem;
+    opacity: 0.8;
+}
+
+.todos>*, .projects>* {
+    margin: 0;
+    border: 0;
+    height: 100%;
+    width: 100%;
+}
+
+/* sidebar */
+
+.projectList {
+    border: solid 1px var(--gray);
+    border-radius: 5px 5px 0 0 ;
+    border-bottom: 0;
+    overflow: hidden;
+}
+
+.projects:first-of-type button:first-of-type {
+    border-radius: 4px 0 0 0;
+}
+.projects:first-of-type button:last-of-type {
+    border-radius: 0 4px 0 0;
+}
+
+.projects:nth-child(even) button{
+    background-color: #fff;
+}
+.projects:nth-child(even) button:hover{
+    background-color: var(--grayLight);
+}
+.projects:nth-child(even) button.active{
+    background-color: var(--blue);
+}
+
+.projects {
+    display: grid;
+    grid-template-columns: 1fr 1.5rem;
+    grid-auto-rows: 1.5rem;
+    border-bottom: solid 1px var(--gray);
+}
+
+.projects :first-child {
+    border-right: solid 1px var(--gray);
+    max-width: 100%;
+    overflow: scroll;
+}
+
+.projects:hover {
+    background-color: var(--grayLight);
+}
+
+.addProjectBtn {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 1.5rem;
+    width: 100%;
+    background-color: var(--comp);
+    border: solid 1px var(--gray);
+    border-top: 0;
+    border-radius: 0 0 5px 5px;
+}
+
+.addProjectBtn:hover {
+    background-color: var(--compFull);
+}
+
+/* project form */
+
+.projectFormWrapper {
+    position: relative;
+    margin-top: 1.5rem;
+    height: 1.5rem;
+    width: 100%;
+}
+
+.projectFormWrapper .closeBtn {
+    position: absolute;
+    right: 0;
+    height: 1.5rem;
+    width: 1.5rem;
+    border: solid 1px var(--gray);
+    border-radius: 0 4px 4px 0;
+}
+
+
+.projectForm #submit {
+    height: 1.5rem;
+    width: 1.5rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+    border: none;
+    border-left: solid 1px var(--gray);
+}
+#submit:hover {
+}
+
+.projectForm {
+    display: grid;
+    grid-template-columns: 1fr 1.5rem calc(1.5rem - 1px);
+    height: 1.5rem;
+    border: solid 1px var(--gray);
+    border-radius: 5px;
+    overflow: hidden;
+}
+
+.projectForm legend {
+    padding: 0;
+    width: auto;
+}
+
+.projectForm input {
+    min-width: none;
+    max-width: none;
+    width: 100%;
+    appearance: none;
+    border: none;
+    flex: 1;
+    margin: 0;
+    padding: 3px 7px;
+}
+.projectForm input:hover {
+    background-color: var(--grayLight);
+}
+
+
+
+
+
+/* main */
+
+.main {
+    margin-top: 25px;
+    width: clamp(200px, 80%, 800px);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.addTaskBtn {
+    width: 80%;
+    height: 3rem;
+    border-radius: 5px 5px 0 0;
+    border: solid 1px var(--gray);
+}
+
+
+.todoView {
+    height: 40vh;
+    width: 80%;
+    overflow: auto;
+}
+
+.main .todos * {
+    display: inline-block;
+}
+
+.todos {
+    display: grid;
+    grid-template-columns: 1fr repeat(3, 1.5rem);
+    grid-auto-rows: 1.5rem;
+    width: 100%;
+    border-left: solid 1px var(--gray);
+    border-right: solid 1px var(--gray);
+    border-bottom: solid 1px var(--gray);
+}
+
+.todos:nth-child(odd) button, .todos:nth-child(odd) .checkMark {
+    background-color: white;
+}
+.todos:nth-child(odd) button:hover, .todos:nth-child(odd) .checkMark:hover {
+    background-color: var(--grayLight);
+}
+.todos:nth-child(odd) button.active {
+    background-color: var(--blue);
+}
+.todos:nth-child(odd) button.active:hover {
+    background-color: var(--blueFull);
+}
+.todos :nth-child(1), .todos :nth-child(2) {
+    border-right: solid 1px var(--gray);
+}
+.todos:last-child {
+    border-radius: 0 0 5px 5px;
+    overflow: hidden;
+}
+.todos:last-child :first-child {
+    border-radius: 0 0 0 4px;
+}
+.todos:last-child button:nth-of-type(2) {
+    border-radius: 0 0 4px 0;
+}
+
+/* .todos>*:hover, .projects>*:hover {
+    border: solid 1px rgb(84, 84, 84);
+} */
+
+.todos button {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+
+
+/* checkbox */
+.checkboxContainer {
+    display: block;
+    position: relative;
+    padding-left: 0;
+    margin-bottom: 0;
+    cursor: pointer;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+  }
+  
+  /* Hide the browser's default checkbox */
+  .checkboxContainer input {
+    position: absolute;
+    opacity: 0;
+    cursor: pointer;
+    height: 0;
+    width: 0;
+  }
+  
+  /* Create a custom checkbox */
+  .checkMark {
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: 100%;
+    background-color: white;
+  }
+  
+  /* On mouse-over, add a grey background color */
+  .checkboxContainer:hover input ~ .checkMark {
+    background-color: var(--grayLight);
+  }
+  
+  /* When the checkbox is checked, add a blue background */
+  .checkboxContainer input:checked ~ .checkMark {
+    background-color: var(--blue);
+  }
+  
+  /* Create the checkMark/indicator (hidden when not checked) */
+  .checkMark:after {
+    content: "";
+    position: absolute;
+    display: none;
+  }
+  
+  /* Show the checkMark when checked */
+  .checkboxContainer input:checked ~ .checkMark:after {
+    display: block;
+  }
+  
+  /* Style the checkMark/indicator */
+  .checkboxContainer .checkMark:after {
+    left: 9px;
+    top: 5px;
+    width: 5px;
+    height: 10px;
+    border: solid white;
+    border-width: 0 3px 3px 0;
+    -webkit-transform: rotate(45deg);
+    -ms-transform: rotate(45deg);
+    transform: rotate(45deg);
+  }
+
+/* FOCUSTASK */
+
+.focusTask {
+    height: 40vh;
+    width: 12rem;
+    background-color: var(--comp);
+    padding: 25px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    border-radius: 15px;
+    text-align: center;
+    border: solid 1px var(--gray);
+}
+.focusTask h1 {
+    margin: 0;
+}
+.focusTask input {
+    width: 100%;
+    height: 1.5rem;
+    text-align: center;
+    background-color: var(--graySoft);
+    border: none;
+    border-left: solid 1px var(--gray);
+    border-right: solid 1px var(--gray);
+    border-bottom: solid 1px var(--gray);
+}
+
+.focusTask input#title  {
+    border-top: solid 1px var(--gray);
+    border-radius: 5px 5px 0 0;
+}
+.focusTask input#dueDate  {
+    border-radius: 0 0 5px 5px ;
+}
+
+.focusTask .prio {
+    margin-top: 1rem;
+    width: 9rem;
+}
+
+.focusTask .taskPriority {
+    border-radius: 4px;
+    border: solid 1px var(--gray);
+}
+
+.focusTask .wrapper {
+    width: 4.5rem;
+    position: relative;
+    top: -1.5rem;
+    left: 4.5rem;
+    height: 1.5rem;
+    display: flex;
+    justify-content: flex-end;
+    background: white;
+    border-radius: 0 4px 4px 0;
+}
+
+.focusTask .wrapper .checkMark, .focusTask .wrapper button:first-of-type {
+    border: solid 1px var(--gray);
+    border-right: none;
+}
+.focusTask .wrapper button:last-child {
+    border: solid 1px var(--gray);
+    border-radius: 0 4px 4px 0;
+}
+
+.focusTask .checkMark, .focusTask button {
+    height: 1.5rem;
+    width: 1.5rem;
+}
+
+.focusTask .checkMark {
+    left: -1.5rem;
+}
+
+/* taskform */
+
+.taskFormWrapper {
+    position: absolute;
+    top: 25vh;
+    left: calc(50vw - 100px);
+    height: 350px;
+    width: 250px;
+}
+
+.taskFormWrapper .closeBtn {
+    position: absolute;
+    right: 0;
+    top: 0;
+    width: 1.5rem;
+    height: 1.5rem;
+    border: solid 1px var(--gray);
+    border-radius: 0 4px 0 4px;
+}
+
+.taskForm {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 25px;
+    border-radius: 4px;
+    border: solid 1px var(--gray);
+    text-align: center;
+    background-image: linear-gradient(var(--graySoft), var(--comp));
+}
+
+.taskForm legend:first-of-type {
+    font-family: var(--sketch);
+    color: var(--blue);
+    font-size: 2rem;
+}
+
+.taskForm input {
+    width: 100%;
+    height: 1.5rem;
+    text-align: center;
+    background-color: var(--graySoft);
+    border: solid 1px var(--gray);
+    border-radius: 4px;
+    margin: 5px;
+}
+
+.taskForm button#submit {
+    width: 3rem;
+    height: 3rem;
+    flex: 0 0 auto;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border: none;
+    border: solid 1px var(--gray);
+    border-radius: 4px;
+    overflow: hidden;
+}
+
+
