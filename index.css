@@ -536,4 +536,9 @@ button:active path, button:active svg {
     overflow: hidden;
 }
 
-
+.footer {
+    position: absolute;
+    font-family: var(--sketch);
+    right: 1rem;
+    bottom: 0.5rem;
+}
